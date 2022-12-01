@@ -25,7 +25,7 @@ class RecFusion(GeneralRecommender):
         super().__init__(config, dataset)
 
         # load parameters info
-        # reg_weight = config['reg_weight']
+        reg_weight = config['reg_weight']
 
         # need at least one param
         self.dummy_param = torch.nn.Parameter(torch.zeros(1))
