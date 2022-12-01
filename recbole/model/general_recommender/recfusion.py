@@ -1,5 +1,7 @@
 r"""
 RecFusion
+################################################
+
 """
 
 import torch
@@ -11,7 +13,7 @@ from recbole.model.abstract_recommender import GeneralRecommender
 
 
 class RecFusion(GeneralRecommender):
-    r"""
+    r"""RecFusion
 
     """
     input_type = InputType.POINTWISE
