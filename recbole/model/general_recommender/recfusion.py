@@ -10,6 +10,8 @@ import scipy.sparse as sp
 
 from recbole.utils import InputType, ModelType
 from recbole.model.abstract_recommender import GeneralRecommender
+#import pdb 
+
 
 
 class RecFusion(GeneralRecommender):
@@ -23,7 +25,7 @@ class RecFusion(GeneralRecommender):
         super().__init__(config, dataset)
 
         # load parameters info
-        reg_weight = config['reg_weight']
+        # reg_weight = config['reg_weight']
 
         # need at least one param
         self.dummy_param = torch.nn.Parameter(torch.zeros(1))
@@ -33,13 +35,16 @@ class RecFusion(GeneralRecommender):
         X = dataset.inter_matrix(form='csr').astype(np.float32)
         # just directly calculate the entire score matrix in init
         # (can't be done incrementally)
-        print(X)
-        print(X.shape)
-        print(dataset)        
+        # print(X)
+        # print(X.shape)
+        # print(dataset)        
+
+        # pdb.set_trace()
         
         # gram matrix
         G = X.T @ X
 
+        
         # add reg to diagonal
         G += reg_weight * sp.identity(G.shape[0])
 
