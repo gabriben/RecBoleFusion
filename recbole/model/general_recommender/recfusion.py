@@ -137,6 +137,7 @@ class RecFusion(GeneralRecommender):
         # (can't be done incrementally)
         x = torch.FloatTensor(X.toarray())
         print(x)
+        print(x.shape)        
 
 
         # =====
