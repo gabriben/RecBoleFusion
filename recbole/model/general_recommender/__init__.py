@@ -26,4 +26,4 @@ from recbole.model.general_recommender.spectralcf import SpectralCF
 from recbole.model.general_recommender.nceplrec import NCEPLRec
 from recbole.model.general_recommender.sgl import SGL
 from recbole.model.general_recommender.admmslim import ADMMSLIM
-
+from recbole.model.general_recommender.recfusion import RecFusion
