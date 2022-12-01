@@ -31,7 +31,7 @@ class RecFusion(GeneralRecommender):
         X = dataset.inter_matrix(form='csr').astype(np.float32)
         # just directly calculate the entire score matrix in init
         # (can't be done incrementally)
-        print(X)
+        # print(X)
         
         # gram matrix
         G = X.T @ X
