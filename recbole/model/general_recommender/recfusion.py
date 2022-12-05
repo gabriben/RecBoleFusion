@@ -149,7 +149,7 @@ class RecFusion(GeneralRecommender):
 
         self.device = config['device']
 
-        beta = torch.FloatTensor([b]).to(device)
+        beta = torch.FloatTensor([b]).to(self.device)
         
         D = dataset.item_num
 
