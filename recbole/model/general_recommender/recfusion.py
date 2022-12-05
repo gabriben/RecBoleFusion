@@ -113,7 +113,7 @@ def reparameterization(mu, log_var):
     return mu + std * eps
 
 
-def reparameterization_gaussian_diffusion(x, i):
+def reparameterization_gaussian_diffusion(x, i, beta):
     return torch.sqrt(1. - beta) * x + torch.sqrt(beta) * torch.randn_like(x)
 
 T = 3  # hyperparater to tune
@@ -149,7 +149,7 @@ class RecFusion(GeneralRecommender):
 
         self.device = config['device']
 
-        beta = torch.FloatTensor([b]).to(self.device)
+        self.beta = torch.FloatTensor([b]).to(self.device)
         
         D = dataset.item_num
 
@@ -215,10 +215,10 @@ class RecFusion(GeneralRecommender):
 
         # =====
         # forward difussion
-        self.Z = [reparameterization_gaussian_diffusion(self.x, 0)]
+        self.Z = [reparameterization_gaussian_diffusion(self.x, 0, self.beta)]
 
         for i in range(1, T):
-            self.Z.append(reparameterization_gaussian_diffusion(self.Z[-1], i))
+            self.Z.append(reparameterization_gaussian_diffusion(self.Z[-1], i, self.beta))
         
         # =====
         # backward diffusion
@@ -263,12 +263,12 @@ class RecFusion(GeneralRecommender):
         RE = log_standard_normal(self.x - self.mu_x).sum(-1)
 
         # KL
-        KL = (log_normal_diag(self.Z[-1], torch.sqrt(1. - beta) * self.Z[-1],
-                              torch.log(beta)) - log_standard_normal(self.Z[-1])).sum(-1)
+        KL = (log_normal_diag(self.Z[-1], torch.sqrt(1. - self.beta) * self.Z[-1],
+                              torch.log(self.beta)) - log_standard_normal(self.Z[-1])).sum(-1)
 
         for i in range(len(self.mus)):
-            KL_i = (log_normal_diag(self.Z[i], torch.sqrt(1. - beta) * self.Z[i], torch.log(
-                beta)) - log_normal_diag(self.Z[i], self.mus[i], self.log_vars[i])).sum(-1)
+            KL_i = (log_normal_diag(self.Z[i], torch.sqrt(1. - self.beta) * self.Z[i], torch.log(
+                self.beta)) - log_normal_diag(self.Z[i], self.mus[i], self.log_vars[i])).sum(-1)
 
             KL = KL + KL_i    
 
