@@ -149,7 +149,7 @@ class RecFusion(GeneralRecommender):
 
         # self.device = config['device']
 
-        self.beta = torch.FloatTensor([b]) #.to(self.device)
+        self.beta = torch.FloatTensor([b]).to(self.device)
         
         D = dataset.item_num
 
@@ -172,14 +172,11 @@ class RecFusion(GeneralRecommender):
         # load parameters info
         # reg_weight = config['reg_weight']
 
-        # need at least one param
-        self.dummy_param = torch.nn.Parameter(torch.zeros(1))
-
         x = dataset.inter_matrix(form='csr').astype(np.float32)
         # just directly calculate the entire score matrix in init
         # (can't be done incrementally)
 
-        self.x = torch.FloatTensor(x.toarray())
+        self.x = torch.FloatTensor(x.toarray()).to(self.device)
         # print(self.x)
         # print(self.x.shape)
         # self.interaction_matrix = x
