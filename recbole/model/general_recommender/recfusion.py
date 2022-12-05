@@ -113,8 +113,8 @@ def reparameterization(mu, log_var):
     return mu + std * eps
 
 
-def reparameterization_gaussian_diffusion(x, i, beta):
-    return torch.sqrt(1. - beta) * x + torch.sqrt(beta) * torch.randn_like(x)
+def reparameterization_gaussian_diffusion(x, i, B):
+    return torch.sqrt(1. - B) * x + torch.sqrt(B) * torch.randn_like(x)
 
 T = 3  # hyperparater to tune
 
