@@ -28,7 +28,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 # import ranking_metrics as metric
 
-import pdb 
+import pdb
+
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
 
 # Auxiliary functions, classes such as distributions
 
@@ -109,65 +113,186 @@ def reparameterization(mu, log_var):
     return mu + std * eps
 
 
+def reparameterization_gaussian_diffusion(x, i):
+    return torch.sqrt(1. - beta) * x + torch.sqrt(beta) * torch.randn_like(x)
+
+T = 3  # hyperparater to tune
+
+M = 200  # the number of neurons in scale (s) and translation (t) nets
+
+beta = 0.0001  # hyperparater to tune
+beta = torch.FloatTensor([beta]).to(device)
+
+reduction = "sum"
+
 ########################
-
-
-
 
 class RecFusion(GeneralRecommender):
     r"""RecFusion
 
     """
     input_type = InputType.POINTWISE
-    type = ModelType.TRADITIONAL
+    # type = ModelType.TRADITIONAL
 
+    # x = None
+    # p_dnns = nn.ModuleList()
+    # decoder_net = nn.ModuleList()
+    # mu_x = None
+    # Z = None
+    # mus = None
+    # log_vars = None
+    
     def __init__(self, config, dataset):
         super().__init__(config, dataset)
 
+
+        ########################
+        
+        D = dataset.item_num
+
+        self.p_dnns = nn.ModuleList([nn.Sequential(nn.Linear(D, M), nn.PReLU(),
+                                              nn.Linear(M, M), nn.PReLU(),
+                                              nn.Linear(M, M), nn.PReLU(),
+                                              nn.Linear(M, M), nn.PReLU(),
+                                              nn.Linear(M, M), nn.PReLU(),
+                                              nn.Linear(M, 2*D)) for _ in range(T-1)])
+
+        self.decoder_net = nn.Sequential(nn.Linear(D, M), nn.PReLU(),
+                                    nn.Linear(M, M), nn.PReLU(),
+                                    nn.Linear(M, M), nn.PReLU(),
+                                    nn.Linear(M, M), nn.PReLU(),
+                                    nn.Linear(M, M), nn.PReLU(),
+                                    nn.Linear(M, D), nn.Tanh())
+
+        ########################
+
         # load parameters info
-        reg_weight = config['reg_weight']
+        # reg_weight = config['reg_weight']
 
         # need at least one param
         self.dummy_param = torch.nn.Parameter(torch.zeros(1))
 
-
-
-        X = dataset.inter_matrix(form='csr').astype(np.float32)
+        x = dataset.inter_matrix(form='csr').astype(np.float32)
         # just directly calculate the entire score matrix in init
         # (can't be done incrementally)
-        x = torch.FloatTensor(X.toarray())
-        print(x)
-        print(x.shape)        
 
+        self.x = torch.FloatTensor(x.toarray())
+        # print(self.x)
+        # print(self.x.shape)
+        # self.interaction_matrix = x
+
+        
+    def init_weights(self):
+        for layer in self.p_dnns:
+            # Xavier Initialization for weights
+            size = layer[0].weight.size()
+            fan_out = size[0]
+            fan_in = size[1]
+            std = np.sqrt(2.0/(fan_in + fan_out))
+            layer[0].weight.data.normal_(0.0, 0.0001)
+
+            # Normal Initialization for Biases
+            layer[0].bias.data.normal_(0.0, 0.0001)
+
+        for layer in self.decoder_net:
+            # Xavier Initialization for weights
+            if str(layer) == "Linear":
+                size = layer.weight.size()
+                fan_out = size[0]
+                fan_in = size[1]
+                std = np.sqrt(2.0/(fan_in + fan_out))
+                layer.weight.data.normal_(0.0, 0.0001)
+
+                # Normal Initialization for Biases
+                layer.bias.data.normal_(0.0, 0.0001)
+        
+    def forward(self):        
+        
+        # x = self.interaction_matrix
 
         # =====
         # forward difussion
-        Z = [self.reparameterization_gaussian_diffusion(x, 0)]
+        self.Z = [reparameterization_gaussian_diffusion(self.x, 0)]
 
-        for i in range(1, self.T):
-            Z.append(self.reparameterization_gaussian_diffusion(Z[-1], i))
+        for i in range(1, T):
+            self.Z.append(reparameterization_gaussian_diffusion(self.Z[-1], i))
         
+        # =====
+        # backward diffusion
+        self.mus = []
+        self.log_vars = []
 
+        for i in range(len(self.p_dnns) - 1, -1, -1):
+
+            h = self.p_dnns[i](self.Z[i+1])
+            mu_i, log_var_i = torch.chunk(h, 2, dim=1)
+            self.mus.append(mu_i)
+            self.log_vars.append(log_var_i)
+
+        # pdb.set_trace()
+            
+        self.mu_x = self.decoder_net(self.Z[0])
+
+        # print("mu_x " + self.mu_x)
+            
         # self.item_similarity = B
-        self.interaction_matrix = Z
-        self.other_parameter_name = ['interaction_matrix', 'item_similarity']
+        # self.interaction_matrix = Z
+        # self.other_parameter_name = ['interaction_matrix', 'item_similarity']
+        # self.mu_x = mu_x
 
-    def forward(self):
-        pass
+        # return self
+        # return self.mu_x
 
     def calculate_loss(self, interaction):
-        return torch.nn.Parameter(torch.zeros(1))
+
+        # x = self.interaction_matrix
+
+        self.init_weights()
+        # self = self.forward()
+        self.forward()
+        
+        # mu_x = self.mu_x
+
+        # =====ELBO
+        # RE
+
+        # Normal RE
+        RE = log_standard_normal(self.x - self.mu_x).sum(-1)
+
+        # KL
+        KL = (log_normal_diag(self.Z[-1], torch.sqrt(1. - beta) * self.Z[-1],
+                              torch.log(beta)) - log_standard_normal(self.Z[-1])).sum(-1)
+
+        for i in range(len(self.mus)):
+            KL_i = (log_normal_diag(self.Z[i], torch.sqrt(1. - beta) * self.Z[i], torch.log(
+                beta)) - log_normal_diag(self.Z[i], self.mus[i], self.log_vars[i])).sum(-1)
+
+            KL = KL + KL_i    
+
+        # Final ELBO
+        anneal = 1
+        if reduction == 'sum':
+            loss = -(RE - anneal * KL).sum()
+        else:
+            loss = -(RE - anneal * KL).mean()
+
+        return loss
 
     def predict(self, interaction):
         user = interaction[self.USER_ID].cpu().numpy()
         item = interaction[self.ITEM_ID].cpu().numpy()
 
-        return torch.from_numpy(
-            (self.interaction_matrix[user, :].multiply(self.item_similarity[:, item].T)).sum(axis=1).getA1()
-        )
+        # pred_mu_x = self.forward()
 
-    def full_sort_predict(self, interaction):
-        user = interaction[self.USER_ID].cpu().numpy()
+        return self.mu_x[user, item]
 
-        r = self.interaction_matrix[user, :] @ self.item_similarity
-        return torch.from_numpy(r.flatten())
+        # return torch.from_numpy(
+        #     (self.interaction_matrix[user, :]
+        # ))
+
+    # def full_sort_predict(self, interaction):
+    #     user = interaction[self.USER_ID].cpu().numpy()
+
+    #     r = self.interaction_matrix[user, :]
+    #     R = torch.FloatTensor(r.toarray())
+    #     return torch.from_numpy(R.flatten().numpy())

@@ -37,7 +37,7 @@ class AbstractRecommender(nn.Module):
             interaction (Interaction): Interaction class of the batch.
 
         Returns:
-            torch.Tensor: Training loss, shape: []
+            torch.Tensor: Training loss, shape:[]
         """
         raise NotImplementedError
 
