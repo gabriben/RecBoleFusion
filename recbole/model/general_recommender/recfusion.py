@@ -121,7 +121,6 @@ T = 3  # hyperparater to tune
 M = 200  # the number of neurons in scale (s) and translation (t) nets
 
 beta = 0.0001  # hyperparater to tune
-# beta = torch.FloatTensor([beta]).to(device)
 
 reduction = "sum"
 
@@ -149,6 +148,8 @@ class RecFusion(GeneralRecommender):
         ########################
 
         self.device = config['device']
+
+        beta = torch.FloatTensor([beta]).to(device)
         
         D = dataset.item_num
 
