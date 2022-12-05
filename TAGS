@@ -1,0 +1,2297 @@
+
+recbole/evaluator/metrics.py,2149
+class Hit(39,1462
+    def __init__(53,2091
+    def calculate_metric(56,2157
+    def metric_info(62,2378
+class MRR(67,2504
+    def __init__(79,2964
+    def calculate_metric(82,3030
+    def metric_info(88,3251
+class MAP(99,3598
+    def __init__(116,4425
+    def calculate_metric(120,4520
+    def metric_info(126,4756
+class Recall(139,5362
+    def __init__(150,5745
+    def calculate_metric(153,5811
+    def metric_info(159,6050
+class NDCG(163,6168
+    def __init__(177,6788
+    def calculate_metric(180,6854
+    def metric_info(186,7091
+class Precision(205,7809
+    def __init__(217,8345
+    def calculate_metric(220,8411
+    def metric_info(226,8638
+class GAUC(233,8773
+    def __init__(259,10180
+    def calculate_metric(262,10246
+    def metric_info(269,10659
+class AUC(311,12590
+    def __init__(332,13583
+    def calculate_metric(335,13649
+    def metric_info(338,13747
+class MAE(369,14699
+    def __init__(382,15166
+    def calculate_metric(385,15232
+    def metric_info(388,15330
+class RMSE(392,15422
+    def __init__(402,15746
+    def calculate_metric(405,15812
+    def metric_info(408,15911
+class LogLoss(412,16011
+    def __init__(423,16417
+    def calculate_metric(426,16483
+    def metric_info(429,16585
+class ItemCoverage(437,16840
+    def __init__(451,17424
+    def used_info(455,17525
+    def calculate_metric(461,17803
+    def get_coverage(469,18147
+class AveragePopularity(483,18580
+    def __init__(498,19195
+    def used_info(502,19296
+    def calculate_metric(508,19595
+    def get_pop(514,19869
+    def metric_info(531,20543
+    def topk_result(534,20652
+class ShannonEntropy(552,21297
+    def __init__(570,22007
+    def used_info(574,22108
+    def calculate_metric(580,22294
+    def get_entropy(588,22617
+class GiniIndex(607,23185
+    def __init__(625,23935
+    def used_info(629,24036
+    def calculate_metric(635,24314
+    def get_gini(643,24651
+class TailPercentage(663,25434
+    def __init__(684,26325
+    def used_info(691,26543
+    def get_tail(697,26834
+    def calculate_metric(721,27838
+    def metric_info(727,28112
+    def topk_result(730,28221
+
+recbole/evaluator/register.py,158
+def cluster_info(18,273
+class Register(65,2381
+    def __init__(71,2635
+    def _build_register(77,2806
+    def has_metric(83,3008
+    def need(89,3154
+
+recbole/evaluator/collector.py,504
+class DataStruct(20,322
+    def __init__(22,349
+    def __getitem__(25,403
+    def __setitem__(28,479
+    def __delitem__(31,563
+    def __contains__(34,636
+    def get(37,713
+    def set(42,887
+    def update_tensor(45,963
+    def __str__(53,1389
+class Collector(60,1566
+    def __init__(70,1969
+    def data_collect(78,2256
+    def _average_rank(95,3141
+    def eval_batch_collect(129,4466
+    def model_collect(180,6973
+    def eval_collect(188,7211
+    def get_data_struct(202,7909
+
+recbole/evaluator/__pycache__/collector.cpython-39.pyc,91
+        As the evaluation metrics are various,27,2425
+                train_data 37,3258
+
+recbole/evaluator/__pycache__/base_metric.cpython-39.pyc,94
+        implement a metric,7,382
+    Args:Args9,442
+    implement an top-k metric,25,1611
+
+recbole/evaluator/__pycache__/evaluator.cpython-39.pyc,32
+            dataobject 15,1149
+
+recbole/evaluator/__pycache__/base_metric.cpython-38.pyc,94
+        implement a metric,7,382
+    Args:Args9,442
+    implement an top-k metric,25,1611
+
+recbole/evaluator/__pycache__/utils.cpython-39.pyc,26
+        sequences 12,448
+
+recbole/evaluator/__pycache__/register.cpython-39.pyc,1197
+        - ``metric_need``: Information needed to calculate this metric,9,470
+        - ``metric_need``: Information needed to calculate this metric, the combination of ``rec.items,items9,470
+        - ``metric_need``: Information needed to calculate this metric, the combination of ``rec.items, rec.topk,topk9,470
+          rec.meanrank,meanrank10,584
+          rec.meanrank, rec.score,score10,584
+          rec.meanrank, rec.score, data.num_items,num_items10,584
+          rec.meanrank, rec.score, data.num_items, data.num_users,num_users10,584
+          rec.meanrank, rec.score, data.num_items, data.num_users, data.count_items,count_items10,584
+          rec.meanrank, rec.score, data.num_items, data.num_users, data.count_items, data.count_users,count_users10,584
+        - ``metric_type``: Whether the scores required by metric are grouped by user,11,701
+        - ``smaller``: Whether the smaller metric value represents better performance,13,861
+          range in ``True`` and ``False`False14,948
+        For ``metric_type``: in current RecBole,17,1024
+        "non-grouped-score" metrics are value-based. To keep with our paper,18,1135
+        module_name 22,1292
+
+recbole/evaluator/__pycache__/metrics.cpython-39.pyc,1095
+Suppose there is a set of :math:`n` items to be ranked. Given a user :math:`u` in the user set :math:`U`U9,478
+we use :math:`\hat R(10,584
+set of user(u)-item(i) pairs, :math:`\hat r_{u i}` represents the score predicted by the model,14,1002
+    you have in an n-sized list of ranked items. If there is at least one item that falls in the ground-truth set,20,1483
+        \mathrm athrm26,1739
+    :math:`\delta(elta28,1838
+       \mathrm{athrm55,4597
+       \mathrm{MAP@K} = \frac{1}{|U|}\sum_{um_55,4597
+    :math:`\hat{R}_{_57,4765
+        \mathrm{AveragePopularity@K}=\frac{1}{|U|} \sum_{u \in U } \frac{rac222,19479
+    :math:`\phi(hi224,19590
+        \mathrm {ShannonEntropy@K}=-\sum_{i=1}^{|I|} p(261,22392
+        \mathrm {GiniIndex@K}=\left(\frac{\sum_{i=1}^{|I|}(2 i-|I|-1) P{(i)}}{|I| \sum_{um_287,24269
+    :math:`P{(i)}` represents the number of times all items appearing in the recommended list,289,24384
+            item_matrix(297,25304
+        \mathrm {TailPercentage@K}=\frac{1}{|U|} \sum_{u \in U} \frac{rac315,26253
+    :math:`\delta(elta317,26371
+
+recbole/evaluator/base_metric.py,367
+class AbstractMetric(19,347
+    def __init__(28,607
+    def calculate_metric(31,700
+class TopkMetric(43,1088
+    def __init__(53,1399
+    def used_info(57,1500
+    def topk_result(65,1895
+    def metric_info(82,2540
+class LossMetric(96,3237
+    def __init__(106,3579
+    def used_info(109,3645
+    def output_metric(116,3909
+    def metric_info(121,4116
+
+recbole/evaluator/utils.py,95
+def pad_sequence(22,374
+def trunc(52,1640
+def cutoff(74,2170
+def _binary_clf_curve(87,2448
+
+recbole/evaluator/evaluator.py,74
+class Evaluator(16,329
+    def __init__(20,462
+    def evaluate(28,743
+
+recbole/config/__pycache__/configurator.cpython-38.pyc,434
+    External input supports three kind of forms: config file,15,901
+    - parameter dictionaries: It should be a dict,26,1320
+    - parameter dictionaries: It should be a dict, where the key is parameter name and the value is parameter value,26,1320
+      e.g. config_dict 27,1437
+    Configuration module allows the above three kind of external input format to be used together,29,1488
+    e.g. If we set learning_rate=34,1685
+
+recbole/config/__pycache__/configurator.cpython-39.pyc,434
+    External input supports three kind of forms: config file,15,901
+    - parameter dictionaries: It should be a dict,26,1320
+    - parameter dictionaries: It should be a dict, where the key is parameter name and the value is parameter value,26,1320
+      e.g. config_dict 27,1437
+    Configuration module allows the above three kind of external input format to be used together,29,1488
+    e.g. If we set learning_rate=34,1685
+
+recbole/config/configurator.py,847
+class Config(27,693
+    def __init__(58,1915
+    def _init_parameters_category(83,3391
+    def _build_yaml_loader(90,3694
+    def _convert_config_dict(106,4259
+    def _load_config_files(131,5194
+    def _load_variable_config_dict(139,5514
+    def _load_cmd_line(145,5906
+    def _merge_external_config_dict(167,6980
+    def _get_model_and_dataset(174,7299
+    def _update_internal_config_dict(204,8395
+    def _load_internal_config_dict(211,8699
+    def _get_final_config_dict(259,11847
+    def _set_default_parameters(265,12074
+    def _init_device(344,16213
+    def _set_train_neg_sample_args(350,16517
+    def _set_eval_neg_sample_args(375,17576
+    def __setitem__(393,18579
+    def __getattr__(398,18752
+    def __getitem__(405,19095
+    def __contains__(411,19258
+    def __str__(416,19426
+    def __repr__(436,20378
+
+recbole/utils/__pycache__/logger.cpython-38.pyc,24
+        config 23,1840
+
+recbole/utils/__pycache__/logger.cpython-39.pyc,24
+        config 22,1830
+
+recbole/utils/__pycache__/utils.cpython-39.pyc,143
+        dir_path 17,838
+    For the convenience of the user,94,4834
+                If the filename is not available,98,5037
+    i111,5832
+
+recbole/utils/__pycache__/utils.cpython-38.pyc,144
+        dir_path 17,838
+    For the convenience of the user,97,4854
+                If the filename is not available,101,5057
+    i114,5852
+
+recbole/utils/__pycache__/wandblogger.cpython-39.pyc,26
+            config 9,379
+
+recbole/utils/__pycache__/url.cpython-39.pyc,21
+        url 24,1508
+
+recbole/utils/logger.py,102
+class RemoveColorFilter(32,507
+    def filter(34,549
+def set_color(41,761
+def init_logger(56,1160
+
+recbole/utils/wandblogger.py,202
+class WandbLogger(11,169
+    def __init__(15,262
+    def setup(24,504
+    def log_metrics(44,1115
+    def log_eval_metrics(52,1424
+    def _set_steps(58,1657
+    def _add_head_to_metrics(62,1826
+
+recbole/utils/url.py,132
+def decide_download(20,316
+def makedirs(31,606
+def download_url(39,794
+def extract_zip(83,1954
+def rename_atomic_files(96,2281
+
+recbole/utils/utils.py,267
+def get_local_time(28,434
+def ensure_dir(40,625
+def get_model(51,851
+def get_trainer(79,1761
+def early_stopping(100,2522
+def calculate_valid_score(144,3762
+def dict2str(160,4176
+def init_seed(173,4439
+def get_tensorboard(193,5049
+def get_gpu_usage(220,6080
+
+recbole/utils/enum_type.py,165
+class ModelType(14,183
+class KGDataLoaderState(31,541
+class EvaluatorType(44,897
+class InputType(55,1119
+class FeatureType(67,1370
+class FeatureSource(82,1772
+
+recbole/utils/case_study.py,57
+def full_sort_scores(22,346
+def full_sort_topk(72,2445
+
+recbole/sampler/__pycache__/sampler.cpython-39.pyc,847
+    a certain number of random value_ids according to the input key_id,15,511
+        distribution 19,676
+            key_ids 78,4650
+            value_ids[value_ids85,5000
+            value_ids[1], value_ids[value_ids85,5000
+            value_ids[1], value_ids[len(key_ids) + 1], value_ids[value_ids85,5000
+    in train-phase to be sampled in valid-phase,phase99,6073
+    in test-phase,phase100,6185
+            phase 128,8771
+            item_ids[item_ids147,9728
+            item_ids[1], item_ids[item_ids147,9728
+            item_ids[1], item_ids[len(user_ids) + 1], item_ids[item_ids147,9728
+        dataset 154,10430
+            entity_ids[entity_ids175,12616
+            entity_ids[1], entity_ids[entity_ids175,12616
+            entity_ids[1], entity_ids[len(head_entity_ids) + 1], entity_ids[entity_ids175,12616
+
+recbole/sampler/sampler.py,1133
+class AbstractSampler(24,531
+    def __init__(36,1028
+    def set_distribution(41,1186
+    def _uni_sampling(51,1492
+    def _get_candidates_list(62,1844
+    def _build_alias_table(70,2119
+    def _pop_sampling(97,3033
+    def sampling(120,3801
+    def get_used_ids(136,4393
+    def sample_by_key_ids(143,4633
+class Sampler(182,6359
+    def __init__(197,7187
+    def _get_candidates_list(216,7847
+    def _uni_sampling(222,8061
+    def get_used_ids(225,8166
+    def set_phase(248,9249
+    def sample_by_user_ids(265,9854
+class KGSampler(288,10841
+    def __init__(296,11181
+    def _uni_sampling(309,11620
+    def _get_candidates_list(312,11727
+    def get_used_ids(315,11821
+    def sample_by_entity_ids(333,12615
+class RepeatableSampler(355,13710
+    def __init__(368,14315
+    def _uni_sampling(380,14691
+    def _get_candidates_list(383,14796
+    def get_used_ids(386,14902
+    def sample_by_user_ids(394,15174
+    def set_phase(417,16238
+class SeqSampler(433,16712
+    def __init__(441,17024
+    def _uni_sampling(450,17292
+    def get_used_ids(453,17397
+    def sample_neg_sequence(456,17439
+
+recbole/model/general_recommender/slimelastic.py,169
+class SLIMElastic(23,643
+    def __init__(32,964
+    def forward(88,2644
+    def calculate_loss(91,2681
+    def predict(94,2775
+    def full_sort_predict(104,3090
+
+recbole/model/general_recommender/admmslim.py,245
+def soft_threshold(21,447
+def zero_mean_columns(25,557
+def add_noise(29,619
+class ADMMSLIM(33,690
+    def __init__(37,797
+    def forward(87,2582
+    def calculate_loss(90,2619
+    def predict(93,2713
+    def full_sort_predict(107,3274
+
+recbole/model/general_recommender/cdae.py,198
+class CDAE(24,534
+    def __init__(31,834
+    def forward(71,2465
+    def get_rating_matrix(80,2730
+    def calculate_loss(97,3622
+    def predict(117,4393
+    def full_sort_predict(126,4703
+
+recbole/model/general_recommender/spectralcf.py,277
+class SpectralCF(27,591
+    def __init__(51,1734
+    def get_laplacian_matrix(87,3224
+    def get_eye_mat(123,4539
+    def get_ego_embeddings(136,4995
+    def forward(147,5445
+    def calculate_loss(160,6037
+    def predict(181,6940
+    def full_sort_predict(192,7313
+
+recbole/model/general_recommender/nncf.py,406
+class NNCF(29,691
+    def __init__(35,976
+    def _init_weights(92,3870
+    def Max_ner(97,4047
+    def get_community_member(121,4872
+    def prepare_vector_element(140,5733
+    def get_neigh_louvain(179,7594
+    def get_neigh_knn(219,9382
+    def get_neigh_random(274,12120
+    def get_neigh_info(311,13628
+    def forward(327,14399
+    def calculate_loss(351,15670
+    def predict(359,15927
+
+recbole/model/general_recommender/convncf.py,239
+class ConvNCFBPRLoss(24,527
+    def __init__(41,1003
+    def forward(44,1075
+class ConvNCF(50,1247
+    def __init__(59,1790
+    def forward(80,2731
+    def reg_loss(95,3216
+    def calculate_loss(114,4012
+    def predict(127,4425
+
+recbole/model/general_recommender/gcmc.py,492
+class GCMC(34,661
+    def __init__(53,1519
+    def get_sparse_eye_mat(123,4498
+    def get_norm_adj_mat(138,4943
+    def forward(173,6330
+    def calculate_loss(179,6664
+    def predict(195,7239
+    def full_sort_predict(205,7534
+class GcEncoder(215,7799
+    def __init__(223,8179
+    def _init_weights(306,11240
+    def forward(324,12116
+class BiDecoder(392,14675
+    def __init__(397,14839
+    def _init_weights(414,15529
+    def forward(418,15735
+def orthogonal(449,16849
+
+recbole/model/general_recommender/dgcf.py,492
+def sample_cor_samples(35,794
+class DGCF(56,1505
+    def __init__(64,1965
+    def _build_sparse_tensor(116,4563
+    def _get_ego_embeddings(120,4771
+    def build_matrix(127,5049
+    def forward(164,6589
+    def calculate_loss(239,10418
+    def create_cor_loss(275,12186
+    def _create_distance_correlation(304,13251
+        def _create_centered_distance(306,13304
+        def _create_distance_covariance(328,14304
+    def predict(351,15212
+    def full_sort_predict(362,15553
+
+recbole/model/general_recommender/line.py,396
+class NegSamplingLoss(27,563
+    def __init__(29,598
+    def forward(32,671
+class LINE(36,765
+    def __init__(43,966
+    def get_used_ids(69,1962
+    def sampler(75,2220
+    def random_num(92,2846
+    def get_user_id_list(107,3457
+    def forward(110,3532
+    def context_forward(117,3716
+    def calculate_loss(128,4077
+    def predict(164,5674
+    def full_sort_predict(173,5860
+
+recbole/model/general_recommender/enmf.py,189
+class ENMF(23,544
+    def __init__(31,788
+    def reg_loss(51,1745
+    def forward(63,2062
+    def calculate_loss(75,2670
+    def predict(102,3588
+    def full_sort_predict(114,3934
+
+recbole/model/general_recommender/__pycache__/nncf.cpython-39.pyc,69
+        First,92,6405
+        First, change the id of node,92,6405
+
+recbole/model/general_recommender/__pycache__/spectralcf.cpython-39.pyc,152
+        For a better stability,34,1488
+            L 55,3438
+dok_matrixr,60,3600
+            Sparse tensor of the identity matrix. Shape of 73,4231
+
+recbole/model/general_recommender/__pycache__/sgl.cpython-39.pyc,339
+    self supervised task,18,798
+    discrimination.Specifically,Specifically19,880
+    discrimination.Specifically,SGL generates multiple views of a node,19,880
+    SGL devises three operators to generate the views â€” node dropout,21,1055
+    SGL devises three operators to generate the views â€” node dropout, edge dropout,21,1055
+
+recbole/model/general_recommender/__pycache__/cdae.cpython-39.pyc,26
+            user 40,2471
+
+recbole/model/general_recommender/__pycache__/dgcf.cpython-39.pyc,284
+        n_users 15,701
+    The interaction matrix of :math:`n_{users} \times n_{items}` is decomposed to :math:`n_{factors}` intent graph,28,1675
+            A_{A_63,4580
+            torch.cuda.FloatTensor: Sparse tensor of the normalized interaction matrix. shape:shape66,4654
+
+recbole/model/general_recommender/__pycache__/lightgcn.cpython-39.pyc,27
+            A_{A_43,2595
+
+recbole/model/general_recommender/__pycache__/line.cpython-39.pyc,21
+random_numr=36,2973
+
+recbole/model/general_recommender/__pycache__/bpr.cpython-39.pyc,26
+            user 18,1262
+
+recbole/model/general_recommender/__pycache__/dmf.cpython-39.pyc,227
+    The original interaction matrix of :math:`n_{users} \times n_{items}` is set as model input,11,578
+        For a better performance and stability,18,970
+isinstancer,38,2907
+        Considering the RAM of device,67,5000
+
+recbole/model/general_recommender/__pycache__/itemknn.cpython-39.pyc,46
+    Aiolli,8,213
+            method 35,2364
+
+recbole/model/general_recommender/__pycache__/gcmc.cpython-39.pyc,381
+    1) a graph encoder model :math:`Z Z19,714
+    1) a graph encoder model :math:`Z = f(X; A)19,714
+    a graph adjacency matrix A,20,828
+    :math:`Z Z21,916
+    2) a pairwise decoder model :math:`\hat A 23,956
+    Note that :math:`N` denotes the number of nodes,26,1151
+    Note that :math:`N` denotes the number of nodes, :math:`D` the number of input features,26,1151
+
+recbole/model/general_recommender/__pycache__/fism.cpython-39.pyc,117
+    These matrices are learned using a structural equation modeling approach,15,761
+            user_input 72,4201
+
+recbole/model/general_recommender/__pycache__/multivae.cpython-39.pyc,26
+            user 31,1860
+
+recbole/model/general_recommender/__pycache__/ngcf.cpython-39.pyc,95
+            A_{A_42,2580
+            Sparse tensor of the identity matrix. Shape of 56,3333
+
+recbole/model/general_recommender/__pycache__/recvae.cpython-39.pyc,81
+    Shenbin,8,291
+    Shenbin, Ilya,8,291
+r(33,2172
+            user 70,4631
+
+recbole/model/general_recommender/__pycache__/admmslim.cpython-39.pyc,25
+from_numpy)r;r28,2792
+
+recbole/model/general_recommender/__pycache__/ract.cpython-39.pyc,26
+            user 42,2730
+
+recbole/model/general_recommender/__pycache__/enmf.cpython-39.pyc,47
+    In order to run non-sampling model,14,626
+
+recbole/model/general_recommender/__pycache__/convncf.cpython-39.pyc,25
+        >>> loss 22,722
+
+recbole/model/general_recommender/__pycache__/nceplrec.cpython-39.pyc,17
+    Ga Wu,9,199
+
+recbole/model/general_recommender/__pycache__/macridvae.cpython-39.pyc,26
+            user 37,2152
+
+recbole/model/general_recommender/ngcf.py,267
+class NGCF(35,820
+    def __init__(41,1050
+    def get_norm_adj_mat(77,2659
+    def get_eye_mat(111,4039
+    def get_ego_embeddings(122,4522
+    def forward(133,4972
+    def calculate_loss(150,5860
+    def predict(172,6852
+    def full_sort_predict(184,7226
+
+recbole/model/general_recommender/bpr.py,232
+class BPR(27,595
+    def __init__(33,759
+    def get_user_embedding(47,1245
+    def get_item_embedding(58,1661
+    def forward(69,2077
+    def calculate_loss(74,2237
+    def predict(85,2711
+    def full_sort_predict(91,2932
+
+recbole/model/general_recommender/multidae.py,229
+class MultiDAE(24,550
+    def __init__(31,814
+    def get_rating_matrix(51,1679
+    def mlp_layers(68,2571
+    def forward(76,2906
+    def calculate_loss(85,3110
+    def predict(98,3405
+    def full_sort_predict(109,3697
+
+recbole/model/general_recommender/ease.py,161
+class EASE(16,334
+    def __init__(24,591
+    def forward(69,2085
+    def calculate_loss(72,2122
+    def predict(75,2216
+    def full_sort_predict(83,2516
+
+recbole/model/general_recommender/dmf.py,270
+class DMF(28,651
+    def __init__(42,1351
+    def _init_weights(91,4157
+    def forward(100,4549
+    def calculate_loss(121,5441
+    def predict(138,6112
+    def get_user_embedding(143,6271
+    def get_item_embedding(162,7221
+    def full_sort_predict(182,8063
+
+recbole/model/general_recommender/recvae.py,467
+def swish(28,652
+def log_norm_pdf(37,810
+class CompositePrior(41,925
+    def __init__(43,959
+    def forward(60,1654
+class Encoder(75,2220
+    def __init__(77,2247
+    def forward(93,3001
+class RecVAE(105,3448
+    def __init__(113,3718
+    def get_rating_matrix(134,4669
+    def reparameterize(151,5561
+    def forward(159,5816
+    def calculate_loss(165,6059
+    def predict(186,6815
+    def full_sort_predict(196,7134
+    def update_prior(205,7382
+
+recbole/model/general_recommender/nais.py,448
+class NAIS(30,704
+    def __init__(42,1245
+    def _init_weights(93,3827
+    def _load_pretrain(108,4425
+    def get_history_info(121,4992
+    def reg_loss(138,5654
+    def attention_mlp(154,6206
+    def mask_softmax(175,7056
+    def softmax(201,8133
+    def inter_forward(223,9027
+    def user_forward(238,9774
+    def forward(266,11115
+    def calculate_loss(269,11197
+    def full_sort_predict(277,11486
+    def predict(297,12403
+
+recbole/model/general_recommender/recfusion.py,433
+def log_categorical(44,749
+def log_bernoulli(55,1109
+def log_normal_diag(66,1425
+def log_standard_normal(77,1759
+def log_min_exp(87,2029
+def log_integer_probability(94,2137
+def log_integer_probability_standard(104,2357
+def reparameterization(110,2486
+class RecFusion(126,2846
+    def __init__(141,3104
+    def forward(180,4639
+    def calculate_loss(212,5569
+    def predict(243,6436
+    def full_sort_predict(251,6674
+
+recbole/model/general_recommender/sgl.py,388
+class SGL(26,627
+    def __init__(40,1348
+    def graph_construction(60,2383
+    def rand_sample(80,3270
+    def create_adjust_matrix(95,3711
+    def csr2tensor(148,6234
+    def forward(164,6769
+    def calculate_loss(181,7479
+    def calc_bpr_loss(195,8232
+    def calc_ssl_loss(224,9434
+    def predict(259,11114
+    def full_sort_predict(267,11478
+    def train(274,11803
+
+recbole/model/general_recommender/fism.py,319
+class FISM(24,545
+    def __init__(33,960
+    def get_history_info(67,2660
+    def reg_loss(84,3322
+    def _init_weights(97,3668
+    def inter_forward(108,4088
+    def user_forward(125,4951
+    def forward(153,6359
+    def calculate_loss(156,6441
+    def full_sort_predict(164,6730
+    def predict(187,7790
+
+recbole/model/general_recommender/macridvae.py,293
+class MacridVAE(31,716
+    def __init__(39,1036
+    def get_rating_matrix(69,2255
+    def mlp_layers(86,3147
+    def reparameterize(94,3482
+    def forward(102,3741
+    def calculate_loss(147,5315
+    def reg_loss(173,6175
+    def predict(189,6804
+    def full_sort_predict(200,7102
+
+recbole/model/general_recommender/itemknn.py,283
+class ComputeSimilarity:ComputeSimilarity22,543
+    def __init__(24,569
+    def compute_similarity(48,1448
+class ItemKNN(150,5901
+    def __init__(157,6107
+    def forward(174,6881
+    def calculate_loss(177,6930
+    def predict(180,7024
+    def full_sort_predict(195,7522
+
+recbole/model/general_recommender/nceplrec.py,165
+class NCEPLRec(24,563
+    def __init__(27,637
+    def forward(81,2729
+    def calculate_loss(84,2766
+    def predict(87,2860
+    def full_sort_predict(93,3104
+
+recbole/model/general_recommender/ract.py,526
+class RaCT(24,553
+    def __init__(31,816
+    def get_rating_matrix(89,3386
+    def mlp_layers(106,4278
+    def reparameterize(114,4613
+    def forward(122,4868
+    def calculate_actor_loss(144,5552
+    def construct_critic_input(165,6181
+    def construct_critic_layers(172,6463
+    def calculate_ndcg(183,6924
+    def critic_forward(199,7697
+    def calculate_critic_loss(205,7869
+    def calculate_ac_loss(213,8195
+    def calculate_loss(218,8368
+    def predict(230,8791
+    def full_sort_predict(241,9089
+
+recbole/model/general_recommender/pop.py,158
+class Pop(22,388
+    def __init__(29,580
+    def forward(37,934
+    def calculate_loss(40,971
+    def predict(48,1226
+    def full_sort_predict(53,1411
+
+recbole/model/general_recommender/neumf.py,226
+class NeuMF(27,556
+    def __init__(38,871
+    def load_pretrain(77,2686
+    def _init_weights(99,3761
+    def forward(103,3904
+    def calculate_loss(122,4857
+    def predict(130,5106
+    def dump_parameters(135,5265
+
+recbole/model/general_recommender/multivae.py,263
+class MultiVAE(23,507
+    def __init__(30,767
+    def get_rating_matrix(54,1763
+    def mlp_layers(71,2655
+    def reparameterize(79,2990
+    def forward(87,3245
+    def calculate_loss(102,3609
+    def predict(123,4249
+    def full_sort_predict(134,4547
+
+recbole/model/general_recommender/lightgcn.py,241
+class LightGCN(32,765
+    def __init__(44,1335
+    def get_norm_adj_mat(73,2631
+    def get_ego_embeddings(108,4018
+    def forward(119,4468
+    def calculate_loss(132,5090
+    def predict(162,6318
+    def full_sort_predict(173,6691
+
+recbole/model/abstract_recommender.py,819
+class AbstractRecommender(25,520
+    def __init__(29,601
+    def calculate_loss(33,712
+    def predict(44,1015
+    def full_sort_predict(55,1348
+    def other_parameter(68,1808
+    def load_other_parameter(73,1994
+    def __str__(79,2159
+class GeneralRecommender(88,2508
+    def __init__(94,2784
+class SequentialRecommender(108,3233
+    def __init__(114,3433
+    def gather_indexes(130,4058
+    def get_attention_mask(136,4377
+class KnowledgeRecommender(146,4952
+    def __init__(152,5256
+class ContextRecommender(173,6123
+    def __init__(181,6517
+    def embed_float_fields(261,10351
+    def embed_token_fields(285,11355
+    def embed_token_seq_fields(302,11939
+    def double_tower_embed_input_fields(341,14107
+    def concat_embed_input_fields(377,16069
+    def embed_input_fields(386,16539
+
+recbole/model/__pycache__/loss.cpython-39.pyc,24
+        - gamma(11,382
+
+recbole/model/__pycache__/layers.cpython-39.pyc,139
+        - layers(12,805
+        - Output:Output21,1321
+        >>> m 25,1448
+        queries 128,8349
+        input_tensor 193,13032
+
+recbole/model/__pycache__/init.cpython-39.pyc,112
+    nn.Embedding and nn.Linear layers. For bias in nn.Linear layers,6,386
+        >>> self.apply(apply13,640
+
+recbole/model/__pycache__/abstract_recommender.cpython-39.pyc,73
+            interaction 15,1048
+            token_seq_fields 126,10665
+
+recbole/model/knowledge_aware_recommender/cke.py,259
+class CKE(23,562
+    def __init__(35,1169
+    def _get_kg_embedding(56,2108
+    def forward(74,2885
+    def _get_rec_loss(80,3099
+    def _get_kg_loss(86,3342
+    def calculate_loss(92,3607
+    def predict(119,4811
+    def full_sort_predict(124,4970
+
+recbole/model/knowledge_aware_recommender/kgnnls.py,477
+class KGNNLS(30,658
+    def __init__(40,1293
+    def get_interaction_table(90,3576
+    def sample_neg_interaction(112,4626
+    def construct_adj(135,5629
+    def get_neighbors(189,8235
+    def aggregate(217,9611
+    def label_smoothness_predict(286,13156
+            def lookup_interaction_table(318,14884
+    def forward(373,17581
+    def calculate_ls_loss(385,18144
+    def calculate_loss(403,18849
+    def predict(423,19598
+    def full_sort_predict(429,19819
+
+recbole/model/knowledge_aware_recommender/kgcn.py,300
+class KGCN(27,596
+    def __init__(36,1164
+    def construct_adj(77,2925
+    def get_neighbors(131,5529
+    def mix_neighbor_vectors(159,6905
+    def aggregate(194,8694
+    def forward(254,11720
+    def calculate_loss(266,12283
+    def predict(287,13074
+    def full_sort_predict(293,13295
+
+recbole/model/knowledge_aware_recommender/mkr.py,281
+class MKR(25,607
+    def __init__(34,1115
+    def forward(78,3275
+    def _l2_loss(123,5796
+    def calculate_rs_loss(126,5871
+    def calculate_kg_loss(149,6925
+    def predict(172,7963
+class CrossCompressUnit(183,8231
+    def __init__(188,8385
+    def forward(196,8688
+
+recbole/model/knowledge_aware_recommender/ripplenet.py,282
+class RippleNet(26,605
+    def __init__(35,1077
+    def _build_ripple_set(84,3089
+    def forward(142,6129
+    def _key_addressing(183,7823
+    def calculate_loss(221,9216
+    def predict(255,10627
+    def _key_addressing_full(259,10729
+    def full_sort_predict(313,12924
+
+recbole/model/knowledge_aware_recommender/kgat.py,461
+class Aggregator(28,690
+    def __init__(32,757
+    def forward(53,1568
+class KGAT(74,2499
+    def __init__(82,2931
+    def init_graph(121,5057
+    def _get_ego_embeddings(146,6239
+    def forward(152,6495
+    def _get_kg_embedding(163,7094
+    def calculate_loss(176,7671
+    def calculate_kg_loss(198,8619
+    def generate_transE_score(226,9692
+    def update_attentive_A(251,10473
+    def predict(273,11639
+    def full_sort_predict(284,12016
+
+recbole/model/knowledge_aware_recommender/cfkg.py,313
+class CFKG(22,527
+    def __init__(39,1313
+    def forward(60,2218
+    def _get_rec_embedding(68,2517
+    def _get_kg_embedding(77,2880
+    def _get_score(84,3214
+    def calculate_loss(90,3429
+    def predict(111,4304
+class InnerProductLoss(117,4464
+    def __init__(121,4578
+    def forward(124,4652
+
+recbole/model/knowledge_aware_recommender/ktup.py,425
+class KTUP(27,690
+    def __init__(35,1121
+    def _masked_softmax(76,3465
+    def convert_to_one_hot(80,3587
+    def st_gumbel_softmax(99,4319
+    def _get_preferences(127,5614
+    def _transH_projection(139,6320
+    def _get_score(142,6469
+    def forward(149,6691
+    def calculate_loss(161,7177
+    def calculate_kg_loss(178,8105
+    def predict(218,9685
+def orthogonalLoss(225,9946
+def alignLoss(232,10169
+
+recbole/model/loss.py,300
+class BPRLoss(21,326
+    def __init__(41,849
+    def forward(45,954
+class RegLoss(50,1105
+    def __init__(55,1196
+    def forward(58,1261
+class EmbLoss(68,1511
+    def __init__(73,1593
+    def forward(77,1691
+class EmbMarginLoss(93,2345
+    def __init__(97,2438
+    def forward(101,2545
+
+recbole/model/context_aware_recommender/pnn.py,358
+class PNN(27,673
+    def __init__(33,865
+    def reg_loss(64,2164
+    def _init_weights(77,2623
+    def forward(85,2931
+    def calculate_loss(104,3883
+    def predict(110,4069
+class InnerProductLayer(114,4148
+    def __init__(120,4316
+    def forward(130,4656
+class OuterProductLayer(153,5466
+    def __init__(158,5680
+    def forward(176,6354
+
+recbole/model/context_aware_recommender/dssm.py,157
+class DSSM(22,507
+    def __init__(28,732
+    def _init_weights(50,1779
+    def forward(58,2087
+    def calculate_loss(91,3768
+    def predict(96,3935
+
+recbole/model/context_aware_recommender/deepfm.py,159
+class DeepFM(26,615
+    def __init__(32,818
+    def _init_weights(50,1559
+    def forward(58,1867
+    def calculate_loss(67,2327
+    def predict(72,2494
+
+recbole/model/context_aware_recommender/lr.py,155
+class LR(20,443
+    def __init__(31,793
+    def _init_weights(40,1031
+    def forward(44,1161
+    def calculate_loss(48,1300
+    def predict(54,1468
+
+recbole/model/context_aware_recommender/widedeep.py,162
+class WideDeep(21,489
+    def __init__(30,1085
+    def _init_weights(47,1731
+    def forward(55,2039
+    def calculate_loss(64,2502
+    def predict(69,2669
+
+recbole/model/context_aware_recommender/fm.py,155
+class FM(26,545
+    def __init__(31,695
+    def _init_weights(43,1027
+    def forward(47,1157
+    def calculate_loss(52,1425
+    def predict(58,1593
+
+recbole/model/context_aware_recommender/nfm.py,156
+class NFM(21,511
+    def __init__(26,627
+    def _init_weights(45,1409
+    def forward(53,1717
+    def calculate_loss(61,2122
+    def predict(66,2289
+
+recbole/model/context_aware_recommender/afm.py,215
+class AFM(23,543
+    def __init__(28,692
+    def _init_weights(47,1451
+    def build_cross(55,1759
+    def afm_layer(77,2692
+    def forward(101,3701
+    def calculate_loss(107,3989
+    def predict(114,4243
+
+recbole/model/context_aware_recommender/fwfm.py,224
+class FwFM(22,498
+    def __init__(33,997
+    def _init_weights(59,1970
+    def _get_feature2field(67,2278
+    def fwfm_layer(91,3055
+    def forward(122,4601
+    def calculate_loss(129,4893
+    def predict(135,5061
+
+recbole/model/context_aware_recommender/autoint.py,193
+class AutoInt(24,566
+    def __init__(30,784
+    def _init_weights(64,2348
+    def autoint_layer(72,2656
+    def forward(97,3710
+    def calculate_loss(102,4008
+    def predict(107,4175
+
+recbole/model/context_aware_recommender/fnn.py,157
+class FNN(21,481
+    def __init__(33,1076
+    def _init_weights(52,1780
+    def forward(60,2088
+    def calculate_loss(68,2452
+    def predict(74,2620
+
+recbole/model/context_aware_recommender/dcn.py,190
+class DCN(30,652
+    def __init__(36,879
+    def _init_weights(70,2296
+    def cross_network(78,2604
+    def forward(101,3548
+    def calculate_loss(115,4127
+    def predict(121,4374
+
+recbole/model/context_aware_recommender/xdeepfm.py,276
+class xDeepFM(31,732
+    def __init__(37,1042
+    def _init_weights(82,3004
+    def reg_loss(90,3345
+    def calculate_reg_loss(102,3738
+    def compressed_interaction_network(116,4340
+    def forward(171,6687
+    def calculate_loss(187,7309
+    def predict(193,7546
+
+recbole/model/context_aware_recommender/ffm.py,485
+class FFM(25,531
+    def __init__(36,1024
+    def _init_weights(61,1985
+    def _get_feature2field(69,2293
+    def get_ffm_input(93,3070
+    def forward(116,4142
+    def calculate_loss(123,4438
+    def predict(129,4606
+class FieldAwareFactorizationMachine(133,4685
+    def __init__(138,4810
+    def forward(186,7592
+    def _get_input_x_emb(219,9061
+    def _emb_token_ffm_input(236,9725
+    def _emb_float_ffm_input(247,10234
+    def _emb_token_seq_ffm_input(261,10876
+
+recbole/model/exlib_recommender/lightgbm.py,136
+class lightgbm(15,264
+    def __init__(22,421
+    def to(25,507
+    def load_state_dict(28,554
+    def load_other_parameter(37,765
+
+recbole/model/exlib_recommender/xgboost.py,135
+class xgboost(15,261
+    def __init__(22,416
+    def to(25,523
+    def load_state_dict(28,570
+    def load_other_parameter(37,767
+
+recbole/model/init.py,83
+def xavier_normal_initialization(15,244
+def xavier_uniform_initialization(34,925
+
+recbole/model/sequential_recommender/s3rec.py,523
+class S3Rec(30,621
+    def __init__(40,911
+    def _init_weights(118,4594
+    def _associated_attribute_prediction(130,5201
+    def _masked_item_prediction(137,5642
+    def _masked_attribute_prediction(143,6042
+    def _segment_prediction(150,6479
+    def forward(155,6696
+    def pretrain(169,7430
+    def _neg_sample(228,10238
+    def _padding_zero_at_left(234,10443
+    def reconstruct_pretrain_data(240,10665
+    def calculate_loss(330,15524
+    def predict(362,17112
+    def full_sort_predict(372,17580
+
+recbole/model/sequential_recommender/gcsan.py,359
+class GNN(28,611
+    def __init__(33,836
+    def _reset_parameters(50,1616
+    def GNNCell(55,1789
+    def forward(86,3171
+class GCSAN(92,3309
+    def __init__(103,3808
+    def _init_weights(147,5633
+    def _get_slice(159,6240
+    def forward(193,7796
+    def calculate_loss(211,8661
+    def predict(232,9696
+    def full_sort_predict(241,10086
+
+recbole/model/sequential_recommender/srgnn.py,327
+class GNN(29,579
+    def __init__(34,804
+    def GNNCell(50,1646
+    def forward(81,3045
+class SRGNN(87,3183
+    def __init__(115,4160
+    def _reset_parameters(143,5378
+    def _get_slice(148,5551
+    def forward(186,7207
+    def calculate_loss(203,8043
+    def predict(222,8983
+    def full_sort_predict(231,9373
+
+recbole/model/sequential_recommender/sasrec.py,197
+class SASRec(26,519
+    def __init__(36,924
+    def _init_weights(79,2730
+    def forward(91,3337
+    def calculate_loss(108,4109
+    def predict(127,5049
+    def full_sort_predict(136,5439
+
+recbole/model/sequential_recommender/transrec.py,231
+class TransRec(24,523
+    def __init__(33,836
+    def _l2_distance(54,1659
+    def gather_last_items(57,1776
+    def forward(63,2079
+    def calculate_loss(72,2511
+    def predict(99,3692
+    def full_sort_predict(113,4271
+
+recbole/model/sequential_recommender/hrm.py,228
+class HRM(27,573
+    def __init__(35,830
+    def inverse_seq_item(67,2183
+    def _init_weights(84,2806
+    def forward(89,2937
+    def calculate_loss(130,4640
+    def predict(152,5599
+    def full_sort_predict(164,6031
+
+recbole/model/sequential_recommender/ksr.py,373
+class KSR(24,542
+    def __init__(31,789
+    def _init_weights(82,3181
+    def _get_kg_embedding(90,3484
+    def _memory_update_cell(101,3995
+    def memory_update(107,4327
+    def memory_read(121,5083
+    def forward(128,5412
+    def _get_item_comb_embedding(147,6316
+    def calculate_loss(153,6537
+    def predict(174,7611
+    def full_sort_predict(183,8011
+
+recbole/model/sequential_recommender/din.py,159
+class DIN(32,825
+    def __init__(45,1450
+    def _init_weights(85,3369
+    def forward(93,3677
+    def calculate_loss(129,5417
+    def predict(139,5831
+
+recbole/model/sequential_recommender/dien.py,658
+class DIEN(34,940
+    def __init__(43,1433
+    def _init_weights(91,3919
+    def forward(99,4235
+    def calculate_loss(137,6159
+    def predict(148,6686
+class InterestExtractorNetwork(158,7091
+    def __init__(164,7396
+    def forward(169,7688
+    def auxiliary_loss(181,8286
+class InterestEvolvingLayer(218,9973
+    def __init__(224,10273
+    def final_output(251,11380
+    def forward(268,12038
+class AGRUCell(307,13953
+    def __init__(319,14429
+    def forward(337,15209
+class AUGRUCell(352,15767
+    def __init__(361,16167
+    def forward(379,16943
+class DynamicRNN(396,17552
+    def __init__(398,17584
+    def forward(408,17969
+
+recbole/model/sequential_recommender/fpmc.py,195
+class FPMC(28,605
+    def __init__(41,1120
+    def _init_weights(64,1950
+    def forward(68,2080
+    def calculate_loss(94,3137
+    def predict(106,3642
+    def full_sort_predict(114,3964
+
+recbole/model/sequential_recommender/caser.py,231
+class Caser(32,718
+    def __init__(42,1265
+    def _init_weights(91,3172
+    def forward(99,3504
+    def reg_loss_conv_h(132,4835
+    def calculate_loss(142,5156
+    def predict(166,6290
+    def full_sort_predict(175,6659
+
+recbole/model/sequential_recommender/fdsa.py,196
+class FDSA(24,542
+    def __init__(31,814
+    def _init_weights(98,3722
+    def forward(110,4329
+    def calculate_loss(165,6725
+    def predict(184,7665
+    def full_sort_predict(193,8055
+
+recbole/model/sequential_recommender/sine.py,262
+class SINE(28,599
+    def __init__(31,671
+    def _init_weight(77,2469
+    def _init_weights(81,2660
+    def calculate_loss(88,2911
+    def calculate_reg_loss(114,4172
+    def predict(120,4440
+    def forward(129,4830
+    def full_sort_predict(179,6858
+
+recbole/model/sequential_recommender/sasrecf.py,198
+class SASRecF(20,431
+    def __init__(25,623
+    def _init_weights(83,3101
+    def forward(95,3708
+    def calculate_loss(130,5366
+    def predict(149,6306
+    def full_sort_predict(158,6689
+
+recbole/model/sequential_recommender/lightsans.py,232
+class LightSANs(22,577
+    def __init__(24,618
+    def _init_weights(66,2748
+    def embedding_layer(76,3197
+    def forward(82,3495
+    def calculate_loss(94,4001
+    def predict(113,4941
+    def full_sort_predict(123,5340
+
+recbole/model/sequential_recommender/narm.py,194
+class NARM(31,700
+    def __init__(37,921
+    def _init_weights(67,2319
+    def forward(75,2627
+    def calculate_loss(96,3493
+    def predict(115,4433
+    def full_sort_predict(124,4823
+
+recbole/model/sequential_recommender/fossil.py,340
+class FOSSIL(25,522
+    def __init__(32,737
+    def inverse_seq_item_embedding(62,1950
+    def reg_loss(89,3001
+    def init_weights(98,3301
+    def forward(103,3464
+    def get_high_order_Markov(115,3931
+    def get_similarity(134,4693
+    def calculate_loss(145,5095
+    def predict(169,6296
+    def full_sort_predict(180,6727
+
+recbole/model/sequential_recommender/gru4rec.py,198
+class GRU4Rec(28,635
+    def __init__(38,1021
+    def _init_weights(69,2207
+    def forward(76,2471
+    def calculate_loss(85,2922
+    def predict(104,3862
+    def full_sort_predict(113,4252
+
+recbole/model/sequential_recommender/bert4rec.py,380
+class BERT4Rec(28,594
+    def __init__(30,634
+    def _init_weights(78,2669
+    def _neg_sample(90,3276
+    def _padding_sequence(96,3472
+    def reconstruct_train_data(102,3723
+    def reconstruct_test_data(149,5702
+    def forward(159,6207
+    def multi_hot_embed(172,6921
+    def calculate_loss(194,7698
+    def predict(228,9624
+    def full_sort_predict(239,10146
+
+recbole/model/sequential_recommender/stamp.py,226
+class STAMP(28,570
+    def __init__(40,1025
+    def _init_weights(68,2343
+    def forward(76,2653
+    def count_alpha(89,3246
+    def calculate_loss(111,4297
+    def predict(130,5237
+    def full_sort_predict(139,5627
+
+recbole/model/sequential_recommender/gru4reckg.py,168
+class GRU4RecKG(23,439
+    def __init__(29,638
+    def forward(73,2448
+    def calculate_loss(87,3085
+    def predict(106,4043
+    def full_sort_predict(115,4433
+
+recbole/model/sequential_recommender/repeatnet.py,557
+class RepeatNet(29,679
+    def __init__(39,1017
+    def _init_weights(78,2507
+    def forward(87,2816
+    def calculate_loss(114,4132
+    def repeat_explore_loss(126,4589
+    def full_sort_predict(141,5270
+    def predict(149,5503
+class Repeat_Explore_Mechanism(163,5957
+    def __init__(165,6001
+    def forward(177,6553
+class Repeat_Recommendation_Decoder(204,7404
+    def __init__(206,7453
+    def forward(218,7980
+class Explore_Recommendation_Decoder(245,8919
+    def __init__(247,8969
+    def forward(260,9566
+def build_map(294,10885
+
+recbole/model/sequential_recommender/shan.py,382
+class SHAN(25,529
+    def __init__(32,786
+    def reg_loss(82,2736
+    def inverse_seq_item(90,3077
+    def init_weights(107,3700
+    def forward(116,4167
+    def calculate_loss(146,5474
+    def predict(168,6589
+    def full_sort_predict(179,7020
+    def long_and_short_term_attention_based_pooling_layer(189,7421
+    def long_term_attention_based_pooling_layer(207,8355
+
+recbole/model/sequential_recommender/hgn.py,287
+class HGN(25,518
+    def __init__(31,686
+    def reg_loss(75,2503
+    def _init_weights(91,3247
+    def feature_gating(99,3578
+    def instance_gating(123,4483
+    def forward(154,5605
+    def calculate_loss(166,6110
+    def predict(188,7286
+    def full_sort_predict(198,7664
+
+recbole/model/sequential_recommender/gru4recf.py,169
+class GRU4RecF(25,591
+    def __init__(41,1207
+    def forward(90,3193
+    def calculate_loss(118,4525
+    def predict(137,5483
+    def full_sort_predict(146,5873
+
+recbole/model/sequential_recommender/npe.py,192
+class NPE(27,563
+    def __init__(34,807
+    def _init_weights(63,1936
+    def forward(67,2066
+    def calculate_loss(77,2454
+    def predict(98,3433
+    def full_sort_predict(108,3807
+
+recbole/model/sequential_recommender/nextitnet.py,454
+class NextItNet(28,686
+    def __init__(41,1546
+    def _init_weights(78,2980
+    def forward(87,3343
+    def reg_loss_rb(95,3759
+    def calculate_loss(106,4108
+    def predict(126,5166
+    def full_sort_predict(134,5481
+class ResidualBlock_a(143,5840
+    def __init__(148,5928
+    def forward(164,6635
+    def conv_pad(179,7164
+class ResidualBlock_b(192,7981
+    def __init__(197,8069
+    def forward(208,8618
+    def conv_pad(218,9170
+
+recbole/model/layers.py,2496
+class MLPLayers(30,692
+    def __init__(54,1593
+    def init_weights(76,2553
+    def forward(84,2895
+def activation_layer(88,2981
+class FMEmbedding(121,4088
+    def __init__(136,4563
+    def forward(141,4761
+class BaseFactorizationMachine(147,4932
+    def __init__(160,5323
+    def forward(164,5459
+class BiGNNLayer(174,5790
+    def __init__(181,5936
+    def forward(188,6252
+class AttLayer(200,6666
+    def __init__(210,6980
+    def forward(217,7282
+class Dice(228,7702
+    def __init__(238,7922
+    def forward(244,8077
+class SequenceAttLayer(251,8265
+    def __init__(263,8622
+    def forward(275,9175
+class VanillaAttention(312,10384
+    def __init__(325,10719
+    def forward(329,10905
+class MultiHeadAttention(338,11272
+    def __init__(351,11686
+    def transpose_for_scores(375,12805
+    def forward(380,12986
+class FeedForward(415,14768
+    def __init__(427,15081
+    def get_hidden_act(436,15534
+    def gelu(446,15789
+    def swish(457,16204
+    def forward(460,16265
+class TransformerLayer(471,16623
+    def __init__(485,17179
+    def forward(495,17660
+class TransformerEncoder(501,17899
+    def __init__(516,18807
+    def forward(534,19347
+class ItemToInterestAggregation(556,20350
+    def __init__(557,20394
+    def forward(562,20626
+class LightMultiHeadAttention(570,20916
+    def __init__(571,20958
+    def transpose_for_scores(603,22619
+    def forward(608,22844
+class LightTransformerLayer(651,24949
+    def __init__(660,25462
+    def forward(668,26050
+class LightTransformerEncoder(674,26275
+    def __init__(686,27195
+    def forward(704,27933
+class ContextSeqEmbAbstractLayer(724,28920
+    def __init__(727,29087
+    def get_fields_name_dim(742,29644
+    def get_embedding(767,31010
+    def embed_float_fields(789,32186
+    def embed_token_fields(816,33363
+    def embed_token_seq_fields(839,34299
+    def embed_input_fields(883,36615
+    def forward(950,39949
+class ContextSeqEmbLayer(954,40053
+    def __init__(957,40229
+class FeatureSeqEmbLayer(980,41104
+    def __init__(984,41287
+class CNNLayers(1005,42026
+    def __init__(1036,43303
+    def init_weights(1070,44655
+    def forward(1078,44997
+class FMFirstOrderLinear(1082,45083
+    def __init__(1088,45298
+    def embed_float_fields(1132,47430
+    def embed_token_fields(1159,48568
+    def embed_token_seq_fields(1178,49290
+    def forward(1207,50680
+class SparseDropout(1250,52514
+    def __init__(1255,52631
+    def forward(1261,52806
+
+recbole/data/interaction.py,683
+def _convert_to_tensor(21,414
+class Interaction(43,1220
+    def __init__(99,3587
+    def __iter__(119,4549
+    def __getattr__(122,4617
+    def __getitem__(129,4946
+    def __setitem__(138,5221
+    def __delitem__(143,5418
+    def __contains__(148,5604
+    def __len__(151,5679
+    def __str__(154,5730
+    def __repr__(163,6070
+    def columns(167,6139
+    def to(174,6302
+    def cpu(202,7343
+    def numpy(213,7675
+    def repeat(225,8026
+    def repeat_interleave(250,8806
+    def update(265,9312
+    def drop(274,9599
+    def _reindex(284,9897
+    def shuffle(293,10160
+    def sort(299,10317
+    def add_prefix(339,11937
+def cat_interactions(348,12198
+
+recbole/data/dataset/kg_dataset.py,941
+class KnowledgeBasedDataset(27,609
+    def __init__(66,2127
+    def _get_field_from_config(69,2193
+    def _data_filtering(82,2908
+    def _filter_link(86,3002
+    def _download(105,3748
+    def _load_data(130,4787
+    def __str__(135,5057
+    def _build_feat_name_list(145,5453
+    def _load_kg(151,5660
+    def _check_kg(160,6068
+    def _load_link(166,6424
+    def _check_link(180,7089
+    def _init_alias(185,7349
+    def _get_rec_item_token(195,7776
+    def _get_entity_token(202,8042
+    def _reset_ent_remapID(209,8308
+    def _merge_item_and_entity(227,8987
+    def _remap_ID_all(262,10988
+    def relation_num(269,11336
+    def entity_num(278,11600
+    def head_entities(287,11886
+    def tail_entities(295,12096
+    def relations(303,12306
+    def entities(311,12505
+    def kg_graph(318,12687
+    def _create_ckg_sparse_matrix(350,13959
+    def _create_ckg_graph(381,15156
+    def ckg_graph(418,16598
+
+recbole/data/dataset/__pycache__/customized_dataset.cpython-39.pyc,387
+    The original version of sampling negative item list is implemented by Zhichao Feng 20,1544
+        E.g., ``u1`` has purchase sequence ``<i1,i143,3226
+        E.g., ``u1`` has purchase sequence ``<i1, i2,43,3226
+        E.g., ``u1`` has purchase sequence ``<i1, i2, i3,43,3226
+        then after augmentation,44,3291
+        ``u1,u146,3355
+        ``u1, <i1> | i2`i246,3355
+
+recbole/data/dataset/__pycache__/decisiontree_dataset.cpython-39.pyc,125
+ÚDecisionTreeDatasetzx:class:`DecisionTreeDataset` is based on :class:`~recbole.data.dataset.dataset.Dataset`Dataset7,283
+
+recbole/data/dataset/__pycache__/kg_dataset.cpython-39.pyc,167
+    It also provides several interfaces to transfer ``.kg`` features into coo sparse matrix,22,1169
+    csr sparse matrix,23,1262
+        head_entity_field 26,1343
+
+recbole/data/dataset/__pycache__/sequential_dataset.cpython-39.pyc,411
+    and provides augmentation interface to adapt to Sequential Recommendation,10,490
+        max_item_list_len 14,628
+        E.g., ``u1`` has purchase sequence ``<i1,i141,2842
+        E.g., ``u1`` has purchase sequence ``<i1, i2,41,2842
+        E.g., ``u1`` has purchase sequence ``<i1, i2, i3,41,2842
+        then after augmentation,42,2907
+        ``u1,u144,2971
+        ``u1, <i1> | i2`i244,2971
+
+recbole/data/dataset/__pycache__/dataset.cpython-39.pyc,140
+        Firstly load interaction features,129,9578
+        Firstly load interaction features, then user/item features optionally,129,9578
+
+recbole/data/dataset/dataset.py,2986
+class Dataset:Dataset33,863
+    def __init__(92,4078
+    def _from_scratch(98,4249
+    def _get_preset(110,4710
+    def _get_field_from_config(124,5172
+    def _data_processing(140,5868
+    def _data_filtering(160,6447
+    def _build_feat_name_list(180,7146
+    def _get_download_url(201,7885
+    def _download(217,8551
+    def _load_data(235,9202
+    def _load_inter_feat(252,9961
+    def _load_user_or_item_feat(291,11959
+    def _load_additional_feat(328,13552
+    def _get_load_and_unload_col(351,14596
+    def _load_feat(385,16041
+    def _set_alias(456,19036
+    def _init_alias(462,19324
+    def _user_item_feat_preparation(488,20593
+    def _preload_weight_matrix(501,21397
+    def _fill_nan(554,24188
+    def _normalize(577,25260
+                def norm(608,26580
+    def _filter_nan_user_or_item(624,27310
+    def _remove_duplication(644,28364
+    def _filter_by_inter_num(670,29531
+    def _get_illegal_ids_by_inter_num(731,32344
+    def _parse_intervals_str(762,33749
+    def _within_intervals(790,35028
+    def _filter_by_field_value(803,35603
+    def _reset_index(822,36581
+    def _del_col(831,36950
+    def _filter_inter_by_user_or_item(847,37545
+    def _set_label_by_threshold(865,38318
+    def _get_remap_list(894,39535
+    def _remap_ID_all(920,40430
+    def _concat_remaped_tokens(931,40785
+    def _remap(952,41572
+    def _change_feat_format(976,42576
+    def num(983,42875
+    def fields(1000,43555
+    def float_like_fields(1023,44508
+    def token_like_fields(1033,44849
+    def seq_fields(1043,45190
+    def non_seq_fields(1053,45532
+    def set_field_property(1062,45848
+    def copy_field_property(1076,46451
+    def field2feats(1087,46920
+    def token2id(1105,47614
+    def id2token(1125,48405
+    def counter(1143,49016
+    def user_counter(1165,49896
+    def item_counter(1175,50203
+    def user_num(1185,50510
+    def item_num(1195,50794
+    def inter_num(1205,51078
+    def avg_actions_of_users(1214,51282
+    def avg_actions_of_items(1226,51736
+    def sparsity(1238,52190
+    def _check_field(1246,52401
+    def join(1256,52741
+    def __getitem__(1271,53276
+    def __len__(1275,53403
+    def __repr__(1278,53463
+    def __str__(1281,53518
+    def copy(1299,54443
+    def _drop_unused_col(1313,55004
+    def _grouped_index(1330,55670
+    def _calcu_split_ids(1339,55934
+    def split_by_ratio(1362,56714
+    def _split_index_by_leave_one_out(1398,58338
+    def leave_one_out(1420,59208
+    def shuffle(1452,60847
+    def sort(1457,60969
+    def build(1467,61376
+    def save(1516,63589
+    def get_user_feature(1526,64023
+    def get_item_feature(1537,64340
+    def _create_sparse_matrix(1548,64657
+    def _create_graph(1586,66295
+    def inter_matrix(1633,68114
+    def _history_matrix(1653,69062
+    def history_item_matrix(1714,71678
+    def history_user_matrix(1738,72686
+    def get_preload_weight(1762,73694
+    def _dataframe_to_interaction(1777,74222
+
+recbole/data/dataset/sequential_dataset.py,251
+class SequentialDataset(23,520
+    def __init__(33,937
+    def _change_feat_format(40,1229
+    def _aug_presets(51,1628
+    def data_augmentation(73,2598
+    def _benchmark_presets(137,5034
+    def inter_matrix(146,5540
+    def build(177,7236
+
+recbole/data/dataset/decisiontree_dataset.py,171
+class DecisionTreeDataset(14,226
+    def __init__(22,394
+    def _judge_token_and_convert(25,460
+    def _convert_token_to_hash(66,2012
+    def _from_scratch(80,2535
+
+recbole/data/dataset/kg_seq_dataset.py,52
+class KGSeqDataset(13,222
+    def __init__(20,535
+
+recbole/data/dataset/customized_dataset.py,193
+class GRU4RecKGDataset(28,622
+    def __init__(30,661
+class KSRDataset(34,728
+    def __init__(36,761
+class DIENDataset(40,828
+    def __init__(56,1748
+    def data_augmentation(65,2121
+
+recbole/data/__pycache__/interaction.cpython-39.pyc,21
+        data 10,503
+
+recbole/data/utils.py,222
+def create_dataset(26,698
+def save_split_dataloaders(74,2640
+def load_split_dataloaders(91,3330
+def data_preparation(119,4523
+def get_dataloader(170,7041
+def _get_AE_dataloader(207,8332
+def create_samplers(227,9073
+
+recbole/data/dataloader/knowledge_dataloader.py,545
+class KGDataLoader(20,611
+    def __init__(35,1259
+    def _init_batch_size_and_step(52,1872
+    def pr_end(58,2052
+    def _shuffle(61,2116
+    def _next_batch_data(64,2180
+class KnowledgeBasedDataLoader(73,2549
+    def __init__(104,3954
+    def _init_batch_size_and_step(116,4359
+    def update_config(119,4414
+    def __iter__(123,4555
+    def _shuffle(138,5172
+    def __next__(141,5210
+    def __len__(148,5462
+    def pr_end(155,5652
+    def _next_batch_data(161,5831
+    def set_mode(170,6122
+    def get_model(186,6739
+
+recbole/data/dataloader/abstract_dataloader.py,612
+class AbstractDataLoader:AbstractDataLoader25,500
+    def __init__(44,1386
+    def _init_batch_size_and_step(54,1725
+    def update_config(58,1924
+    def __len__(67,2207
+    def __iter__(70,2281
+    def __next__(75,2379
+    def pr_end(82,2550
+    def _shuffle(86,2742
+    def _next_batch_data(91,2961
+    def set_batch_size(99,3244
+class NegSampleDataLoader(110,3642
+    def __init__(122,4220
+    def _set_neg_sample_args(125,4353
+    def _neg_sampling(157,5994
+    def _neg_sample_by_pair_wise_sampling(182,7564
+    def _neg_sample_by_point_wise_sampling(190,7933
+    def get_model(200,8393
+
+recbole/data/dataloader/general_dataloader.py,676
+class TrainDataLoader(23,601
+    def __init__(36,1225
+    def _init_batch_size_and_step(40,1471
+    def update_config(51,1903
+    def pr_end(56,2110
+    def _shuffle(59,2166
+    def _next_batch_data(62,2222
+class NegSampleEvalDataLoader(68,2390
+    def __init__(81,3074
+    def _init_batch_size_and_step(102,4124
+    def update_config(119,4814
+    def pr_end(124,5013
+    def _shuffle(130,5178
+    def _next_batch_data(133,5274
+class FullSortEvalDataLoader(161,6444
+    def __init__(173,7040
+    def _set_user_property(201,8466
+    def _init_batch_size_and_step(209,8857
+    def pr_end(221,9306
+    def _shuffle(227,9453
+    def _next_batch_data(230,9548
+
+recbole/data/dataloader/__pycache__/user_dataloader.cpython-39.pyc,23
+        config 10,474
+
+recbole/data/dataloader/__pycache__/knowledge_dataloader.cpython-39.pyc,23
+        config 13,581
+
+recbole/data/dataloader/__pycache__/abstract_dataloader.cpython-39.pyc,23
+        config 15,728
+
+recbole/data/dataloader/__pycache__/general_dataloader.cpython-39.pyc,65
+    For the result of every batch,11,651
+        config 15,799
+
+recbole/data/dataloader/user_dataloader.py,182
+class UserDataLoader(20,450
+    def __init__(34,1066
+    def _init_batch_size_and_step(44,1461
+    def pr_end(50,1641
+    def _shuffle(53,1699
+    def _next_batch_data(56,1757
+
+recbole/quick_start/quick_start.py,90
+def run_recbole(20,427
+def objective_function(74,2601
+def load_data_and_model(102,3980
+
+recbole/quick_start/__pycache__/quick_start.cpython-38.pyc,22
+        model 17,861
+
+recbole/quick_start/__pycache__/quick_start.cpython-39.pyc,22
+        model 17,861
+
+recbole/trainer/hyper_tuning.py,473
+def _recursiveFindNodes(19,293
+def _parameters(41,1005
+def _spacesize(58,1605
+class ExhaustiveSearchError(64,1776
+def _validate_space_exhaustive_search(71,1867
+def exhaustive_search(84,2525
+class HyperTuning(129,4167
+    def __init__(141,4662
+    def _build_space_from_file(177,5875
+    def _build_space_from_dict(203,7158
+    def params2str(235,8720
+    def _print_result(249,9087
+    def export_result(257,9400
+    def trial(270,9950
+    def run(304,11210
+
+recbole/trainer/__pycache__/trainer.cpython-39.pyc,180
+    AbstractTrainer is an abstract class in which the fit(9,982
+            params 60,4633
+            train_data 163,12331
+    cc234,18920
+            dataloader 287,24717
+
+recbole/trainer/__pycache__/hyper_tuning.cpython-39.pyc,290
+qlognormalÚcategoricalzJExhaustive search is only possible with the following stochastic symbols:symbols30,2153
+    Given objective funciton,43,4119
+    Given objective funciton, parameters range and optimization algorithm,43,4119
+        HyperTuning is based on the hyperopt 47,4275
+
+recbole/trainer/trainer.py,2027
+class AbstractTrainer(37,1317
+    def __init__(43,1632
+    def fit(47,1728
+    def evaluate(53,1900
+class Trainer(61,2080
+    def __init__(76,2992
+    def _build_optimizer(111,4602
+    def _train_epoch(152,6730
+    def _valid_epoch(198,8957
+    def _save_checkpoint(213,9536
+    def resume_checkpoint(234,10339
+    def _check_nan(262,11627
+    def _generate_train_loss_output(266,11743
+    def _add_train_loss_to_tensorboard(278,12453
+    def _add_hparam_to_tensorboard(285,12778
+    def fit(308,13795
+    def _full_sort_batch_eval(391,18213
+    def _neg_sample_batch_eval(412,19168
+    def evaluate(430,20081
+    def _spilt_predict(486,22796
+class KGTrainer(503,23593
+    def __init__(509,23814
+    def _train_epoch(515,24018
+class KGATTrainer(532,24903
+    def __init__(537,25033
+    def _train_epoch(540,25130
+class PretrainTrainer(559,25780
+    def __init__(564,25956
+    def save_pretrained_model(569,26169
+    def pretrain(586,26757
+class S3RecTrainer(612,28082
+    def __init__(618,28315
+    def fit(621,28413
+class MKRTrainer(630,28911
+    def __init__(635,29038
+    def _train_epoch(639,29185
+class TraditionalTrainer(660,29965
+    def __init__(665,30131
+class DecisionTreeTrainer(670,30314
+    def __init__(675,30431
+    def _interaction_to_sparse(709,31953
+    def _interaction_to_lib_datatype(760,33905
+    def _valid_epoch(763,33975
+    def _save_checkpoint(773,34361
+    def fit(790,34869
+    def evaluate(834,36981
+    def _train_at_once(837,37111
+class xgboostTrainer(841,37201
+    def __init__(846,37301
+    def _interaction_to_lib_datatype(865,37992
+    def _train_at_once(876,38434
+    def evaluate(901,39436
+class lightgbmTrainer(918,40131
+    def __init__(923,40234
+    def _interaction_to_lib_datatype(942,40965
+    def _train_at_once(953,41402
+    def evaluate(979,42431
+class RaCTTrainer(996,43161
+    def __init__(1002,43439
+    def fit(1005,43536
+class RecVAETrainer(1019,44241
+    def __init__(1024,44359
+    def _train_epoch(1032,44751
+
+tests/metrics/test_topk_metrics.py,382
+class TestTopKMetrics(52,914
+    def test_hit(53,956
+    def test_ndcg(60,1199
+    def test_mrr(77,1890
+    def test_map(85,2193
+    def test_recall(94,2539
+    def test_precision(102,2847
+    def test_itemcoverage(110,3152
+    def test_averagepopularity(117,3362
+    def test_giniindex(125,3728
+    def test_shannonentropy(133,4026
+    def test_tailpercentage(141,4387
+
+tests/metrics/test_rank_metrics.py,119
+class MetricsTestCases(29,622
+def get_metric_result(39,909
+class TestRankMetrics(47,1226
+    def test_gauc(48,1269
+
+tests/metrics/test_loss_metrics.py,184
+class TestCases(23,404
+def get_result(31,596
+class TestLossMetrics(38,789
+    def test_auc(39,831
+    def test_rmse(44,995
+    def test_logloss(51,1311
+    def test_mae(60,1653
+
+tests/config/test_overall.py,710
+def run_parms(23,363
+class TestOverallConfig(41,925
+    def setUp(43,970
+    def test_gpu_id(46,1049
+    def test_use_gpu(49,1142
+    def test_reproducibility(52,1234
+    def test_seed(55,1342
+    def test_data_path(58,1427
+    def test_epochs(61,1535
+    def test_train_batch_size(64,1621
+    def test_learner(67,1735
+    def test_learning_rate(70,1836
+    def test_training_neg_sampling(73,1943
+    def test_eval_step(76,2089
+    def test_stopping_step(82,2233
+    def test_checkpoint_dir(88,2390
+    def test_eval_batch_size(91,2508
+    def test_topk(94,2611
+    def test_loss(101,2856
+    def test_metric(109,3172
+    def test_split_ratio(118,3443
+    def test_group_by_user(121,3595
+
+tests/config/test_config.py,270
+class TestConfigClass(27,475
+    def test_default_settings(29,518
+    def test_default_context_settings(56,1741
+    def test_default_sequential_settings(68,2286
+    def test_config_file_list(78,2759
+    def test_config_dict(89,3312
+    def test_priority(101,3898
+
+tests/evaluation_setting/test_evaluation_setting.py,407
+class TestGeneralRecommender(19,400
+    def test_rols_full(21,450
+    def test_tols_full(29,763
+    def test_tors_full(37,1076
+    def test_rors_uni100(45,1388
+    def test_tols_uni100(53,1704
+    def test_rols_uni100(62,2063
+    def test_tors_uni100(70,2380
+class TestContextRecommender(79,2697
+    def test_tors(81,2747
+class TestSequentialRecommender(91,3097
+    def test_tols_uni100(93,3150
+
+tests/model/test_model_auto.py,4163
+def quick_test(20,400
+class TestGeneralRecommender(24,527
+    def test_pop(26,577
+    def test_itemknn(32,696
+    def test_bpr(38,823
+    def test_bpr_with_dns(44,942
+    def test_neumf(54,1173
+    def test_convncf(60,1296
+    def test_dmf(66,1423
+    def test_dmf_with_rating(72,1542
+    def test_fism(79,1716
+    def test_fism_with_split_to_and_alpha(85,1837
+    def test_nais(93,2036
+    def test_nais_with_concat(99,2157
+    def test_spectralcf(109,2404
+    def test_gcmc(115,2537
+    def test_gcmc_with_stack(121,2658
+    def test_ngcf(129,2857
+    def test_lightgcn(135,2978
+    def test_dgcf(141,3107
+    def test_line(147,3228
+    def test_ease(153,3349
+    def test_MultiDAE(159,3470
+    def test_MultiVAE(166,3632
+    def test_enmf(173,3794
+    def test_MacridVAE(180,3949
+    def test_CDAE(187,4113
+    def test_NNCF(194,4267
+    def test_RecVAE(200,4388
+    def test_slimelastic(207,4546
+    def test_SGL(213,4685
+    def test_ADMMSLIM(219,4808
+class TestContextRecommender(226,4938
+    def test_lr(229,5072
+    def test_fm(236,5229
+    def test_nfm(243,5386
+    def test_deepfm(250,5545
+    def test_xdeepfm(257,5710
+    def test_xdeepfm_with_direct(264,5877
+    def test_afm(272,6084
+    def test_fnn(279,6243
+    def test_pnn(286,6402
+    def test_pnn_with_use_inner_and_use_outer(293,6561
+    def test_pnn_without_use_inner_and_use_outer(302,6811
+    def test_dssm(311,7066
+    def test_widedeep(318,7227
+    def test_autoint(325,7396
+    def test_ffm(332,7563
+    def test_fwfm(339,7722
+    def test_dcn(346,7883
+    def test_xgboost(353,8042
+    def test_lightgbm(366,8425
+class TestSequentialRecommender(380,8803
+    def test_din(382,8856
+    def test_dien(388,8975
+    def test_fpmc(394,9096
+    def test_gru4rec(400,9217
+    def test_gru4rec_with_BPR_loss(407,9377
+    def test_narm(414,9550
+    def test_narm_with_BPR_loss(421,9704
+    def test_stamp(428,9871
+    def test_stamp_with_BPR_loss(435,10027
+    def test_caser(442,10196
+    def test_caser_with_BPR_loss(451,10430
+    def test_nextitnet(460,10677
+    def test_nextitnet_with_BPR_loss(468,10879
+    def test_transrec(476,11094
+    def test_sasrec(482,11223
+    def test_sasrec_with_BPR_loss_and_relu(489,11381
+    def test_sasrec_with_BPR_loss_and_sigmoid(497,11594
+    def test_srgnn(505,11813
+    def test_srgnn_with_BPR_loss(513,12008
+    def test_gcsan(521,12216
+    def test_gcsan_with_BPR_loss_and_tanh(529,12411
+    def test_gru4recf(538,12662
+    def test_gru4recf_with_max_pooling(545,12824
+    def test_gru4recf_with_sum_pooling(553,13038
+    def test_sasrecf(561,13252
+    def test_sasrecf_with_max_pooling(568,13412
+    def test_sasrecf_with_sum_pooling(576,13624
+    def test_hrm(584,13836
+    def test_hrm_with_BPR_loss(591,13988
+    def test_npe(598,14153
+    def test_npe_with_BPR_loss(605,14305
+    def test_shan(612,14470
+    def test_shan_with_BPR_loss(619,14624
+    def test_hgn(626,14791
+    def test_hgn_with_CE_loss(632,14910
+    def test_fossil(640,15106
+    def test_repeat_net(647,15264
+    def test_fdsa(653,15396
+    def test_fdsa_with_max_pooling(660,15550
+    def test_fdsa_with_sum_pooling(668,15756
+    def test_bert4rec(676,15962
+    def test_bert4rec_with_BPR_loss_and_swish(683,16124
+    def test_lightsans(691,16343
+    def test_lightsans_with_BPR_loss(698,16507
+    def test_sine(705,16684
+    def test_sine_with_BPR_loss(712,16838
+    def test_sine_with_NLL_loss(719,17005
+class TestKnowledgeRecommender(749,17763
+    def test_cke(751,17815
+    def test_cfkg(757,17934
+    def test_cfkg_with_transe(763,18055
+    def test_ktup(770,18227
+    def test_ktup_with_L1_flag(779,18438
+    def test_kgat(787,18637
+    def test_kgat_with_gcn(793,18758
+    def test_kgat_with_graphsage(800,18926
+    def test_ripplenet(807,19106
+    def test_mkr(813,19237
+    def test_mkr_without_use_inner_product(819,19356
+    def test_kgcn(826,19541
+    def test_kgcn_with_neighbor(832,19662
+    def test_kgcn_with_concat(839,19835
+    def test_kgnnls(846,20004
+    def test_kgnnls_with_neighbor(852,20129
+    def test_kgnnls_with_concat(859,20306
+
+tests/model/test_model_manual.py,90
+def quick_test(16,308
+class TestSequentialRecommender(20,435
+    def test_s3rec(28,629
+
+tests/data/test_dataloader.py,592
+def new_dataloader(23,519
+class TestGeneralDataloader:TestGeneralDataloader31,846
+    def test_general_dataloader(32,875
+        def check_dataloader(47,1459
+    def test_general_neg_sample_dataloader_in_pair_wise(63,2159
+    def test_general_neg_sample_dataloader_in_point_wise(90,3364
+    def test_general_full_dataloader(117,4520
+        def check_result(132,5123
+    def test_general_uni100_dataloader_with_batch_size_in_101(207,7955
+        def check_result(222,8587
+    def test_general_uni100_dataloader_with_batch_size_in_303(286,11270
+        def check_result(301,11902
+
+tests/data/test_dataset.py,2270
+def new_dataset(23,502
+def split_dataset(30,778
+class TestDataset:TestDataset35,953
+    def test_filter_nan_user_or_item(36,972
+    def test_remove_duplication_by_first(48,1383
+    def test_remove_duplication_by_last(59,1762
+    def test_filter_by_field_value_with_lowest_val(70,2139
+    def test_filter_by_field_value_with_highest_val(83,2561
+    def test_filter_by_field_value_with_equal_val(96,2985
+    def test_filter_by_field_value_with_not_equal_val(109,3401
+    def test_filter_by_field_value_in_same_field(122,3832
+    def test_filter_by_field_value_in_different_field(135,4250
+    def test_filter_inter_by_user_or_item_is_true(149,4718
+    def test_filter_inter_by_user_or_item_is_false(160,5111
+    def test_filter_by_inter_num_in_min_user_inter_num(171,5506
+    def test_filter_by_inter_num_in_min_item_inter_num(183,5925
+    def test_filter_by_inter_num_in_max_user_inter_num(195,6344
+    def test_filter_by_inter_num_in_max_item_inter_num(207,6764
+    def test_filter_by_inter_num_in_min_inter_num(219,7184
+    def test_filter_by_inter_num_in_complex_way(232,7648
+    def test_rm_dup_by_first_and_filter_value(245,8108
+    def test_rm_dup_by_last_and_filter_value(259,8562
+    def test_rm_dup_and_filter_by_inter_num(273,9014
+    def test_filter_value_and_filter_inter_by_ui(288,9564
+    def test_filter_value_and_inter_num(305,10162
+    def test_filter_inter_by_ui_and_inter_num(324,10822
+    def test_remap_id(339,11389
+    def test_remap_id_with_alias(360,12432
+    def test_ui_feat_preparation_and_fill_nan(383,13627
+    def test_set_label_by_threshold(412,15187
+    def test_normalize_all(427,15680
+    def test_normalize_field(439,16127
+    def test_TO_RS_811(452,16617
+    def test_TO_RS_820(468,17496
+    def test_TO_RS_802(483,18291
+    def test_TO_LS_valid_and_test(498,19086
+    def test_TO_LS_valid_only(514,19977
+    def test_TO_LS_test_only(529,20770
+    def test_RO_RS_811(544,21561
+    def test_RO_RS_820(557,22183
+    def test_RO_RS_802(570,22777
+class TestSeqDataset:TestSeqDataset584,23372
+    def test_seq_leave_one_out(585,23394
+    def test_seq_split_by_ratio(646,26461
+    def test_seq_benchmark(688,28539
+class TestKGDataset:TestKGDataset729,30605
+    def test_kg_remap_id(730,30626
+
+run_example/session_based_rec_example.py,21
+def get_args(27,662
+
+run_example/save_and_load_example.py,50
+def save_example(17,336
+def load_example(27,595
+
+run_hyper.py,17
+def main(17,383
+
+run_recbole.py,0
+
+setup.py,0
+
+run_example/case_study_example.py,0
+
+docs/source/conf.py,0
+
+tests/config/test_command_line.py,0
+
+recbole/trainer/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/trainer/__init__.py,0
+
+recbole/quick_start/__init__.pyc,0
+
+recbole/quick_start/__pycache__/__init__.cpython-38.pyc,0
+
+recbole/quick_start/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/quick_start/__init__.py,0
+
+recbole/data/dataloader/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/data/dataloader/__init__.py,0
+
+recbole/data/__pycache__/utils.cpython-39.pyc,0
+
+recbole/data/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/data/__init__.py,0
+
+recbole/data/dataset/__pycache__/kg_seq_dataset.cpython-39.pyc,0
+
+recbole/data/dataset/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/data/dataset/__init__.py,0
+
+recbole/__init__.pyc,0
+
+recbole/model/sequential_recommender/__init__.py,0
+
+recbole/model/exlib_recommender/__init__.py,0
+
+recbole/model/context_aware_recommender/__init__.py,0
+
+recbole/model/knowledge_aware_recommender/__init__.py,0
+
+recbole/model/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/model/__init__.py,0
+
+recbole/model/general_recommender/__pycache__/slimelastic.cpython-39.pyc,0
+
+recbole/model/general_recommender/__pycache__/recfusion.cpython-39.pyc,0
+
+recbole/model/general_recommender/__pycache__/neumf.cpython-39.pyc,0
+
+recbole/model/general_recommender/__pycache__/ease.cpython-39.pyc,0
+
+recbole/model/general_recommender/__pycache__/multidae.cpython-39.pyc,0
+
+recbole/model/general_recommender/__pycache__/nais.cpython-39.pyc,0
+
+recbole/model/general_recommender/__pycache__/pop.cpython-39.pyc,0
+
+recbole/model/general_recommender/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/model/general_recommender/__init__.py,0
+
+recbole/sampler/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/sampler/__init__.py,0
+
+recbole/__pycache__/__init__.cpython-38.pyc,0
+
+recbole/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/utils/__pycache__/enum_type.cpython-39.pyc,0
+
+recbole/utils/__pycache__/argument_list.cpython-39.pyc,0
+
+recbole/utils/__pycache__/__init__.cpython-38.pyc,0
+
+recbole/utils/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/utils/__init__.py,0
+
+recbole/utils/argument_list.py,0
+
+recbole/__init__.py,0
+
+recbole/config/__pycache__/__init__.cpython-38.pyc,0
+
+recbole/config/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/config/__init__.py,0
+
+recbole/evaluator/__pycache__/__init__.cpython-38.pyc,0
+
+recbole/evaluator/__pycache__/__init__.cpython-39.pyc,0
+
+recbole/evaluator/__init__.py,0

@@ -31,7 +31,7 @@ import torch.nn.functional as F
 import pdb
 
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+# device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 # Auxiliary functions, classes such as distributions
@@ -121,7 +121,7 @@ T = 3  # hyperparater to tune
 M = 200  # the number of neurons in scale (s) and translation (t) nets
 
 beta = 0.0001  # hyperparater to tune
-beta = torch.FloatTensor([beta]).to(device)
+# beta = torch.FloatTensor([beta]).to(device)
 
 reduction = "sum"
 
@@ -147,6 +147,8 @@ class RecFusion(GeneralRecommender):
 
 
         ########################
+
+        self.device = config['device']
         
         D = dataset.item_num
 
@@ -193,7 +195,7 @@ class RecFusion(GeneralRecommender):
 
             # Normal Initialization for Biases
             layer[0].bias.data.normal_(0.0, 0.0001)
-
+            
         for layer in self.decoder_net:
             # Xavier Initialization for weights
             if str(layer) == "Linear":
