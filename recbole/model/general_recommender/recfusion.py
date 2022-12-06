@@ -241,7 +241,7 @@ class RecFusion(GeneralRecommender):
         # self.mu_x = mu_x
 
         # return self
-        # return self.mu_x
+        return self.mu_x
 
     def calculate_loss(self, interaction):
 
@@ -282,9 +282,12 @@ class RecFusion(GeneralRecommender):
         user = interaction[self.USER_ID].cpu().numpy()
         item = interaction[self.ITEM_ID].cpu().numpy()
 
-        # pred_mu_x = self.forward()
+        pdb.set_trace()
 
-        return self.mu_x[user, item]
+        pred_mu_x = self.forward()
+        return pred_mu_x[user, item]
+
+        # return self.mu_x[user, item]
 
         # return torch.from_numpy(
         #     (self.interaction_matrix[user, :]
