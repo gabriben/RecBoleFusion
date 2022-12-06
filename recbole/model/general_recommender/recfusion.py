@@ -206,13 +206,13 @@ class RecFusion(GeneralRecommender):
                 # Normal Initialization for Biases
                 layer.bias.data.normal_(0.0, 0.0001)
         
-    def forward(self):        
+    def forward(self, x):        
         
         # x = self.interaction_matrix
 
         # =====
         # forward difussion
-        self.Z = [reparameterization_gaussian_diffusion(self.x, 0, self.beta)]
+        self.Z = [reparameterization_gaussian_diffusion(x, 0, self.beta)]
 
         for i in range(1, T):
             self.Z.append(reparameterization_gaussian_diffusion(self.Z[-1], i, self.beta))
@@ -249,7 +249,7 @@ class RecFusion(GeneralRecommender):
 
         self.init_weights()
         # self = self.forward()
-        self.forward()
+        self.forward(self.x)
         
         # mu_x = self.mu_x
 
@@ -284,8 +284,7 @@ class RecFusion(GeneralRecommender):
 
         pdb.set_trace()
 
-        pred_mu_x = self.forward()
-        return pred_mu_x[user, item]
+        return self.forward(self.x[user, item])
 
         # return self.mu_x[user, item]
 
