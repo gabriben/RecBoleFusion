@@ -146,7 +146,12 @@ class RecFusion(GeneralRecommender):
     def __init__(self, config, dataset):
         super().__init__(config, dataset)
 
+        # recbole code
+        self.history_item_id, self.history_item_value, _ = dataset.history_item_matrix()
+        self.history_item_id = self.history_item_id.to(self.device)
+        self.history_item_value = self.history_item_value.to(self.device)
 
+        
         ########################
 
         # self.device = config['device']
