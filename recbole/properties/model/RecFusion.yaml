@@ -1,2 +1,2 @@
-reg_weight: 250.0
-group_by: "none"
+eval_args:
+    group_by: None

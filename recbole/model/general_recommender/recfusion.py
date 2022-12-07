@@ -299,3 +299,11 @@ class RecFusion(GeneralRecommender):
     #     r = self.interaction_matrix[user, :]
     #     R = torch.FloatTensor(r.toarray())
     #     return torch.from_numpy(R.flatten().numpy())
+
+# [🐛BUG] running run_recbole.py with `ml-1m` and `NeuMF` errors out
+    
+# **Describe the bug**
+# A clear and concise description of what the bug is.
+
+# **To Reproduce**
+# Run this in colab: https://colab.research.google.com/drive/1163UQKKcmY2uiWxmHsmm_sZ6Uw5x9x_S?usp=sharing    
