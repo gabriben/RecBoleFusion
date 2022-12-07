@@ -283,6 +283,7 @@ class RecFusion(GeneralRecommender):
         item = interaction[self.ITEM_ID].cpu().numpy()
 
         # pdb.set_trace()
+        print(self.x[user, item].shape)
 
         return self.forward(self.x[user, item])
 
