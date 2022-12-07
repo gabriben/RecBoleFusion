@@ -124,6 +124,8 @@ b = 0.0001  # hyperparater to tune
 
 reduction = "sum"
 
+num_layers = "TODO"
+
 ########################
 
 class RecFusion(GeneralRecommender):
@@ -231,7 +233,7 @@ class RecFusion(GeneralRecommender):
 
         # pdb.set_trace()
             
-        self.mu_x = self.decoder_net(self.Z[0])
+        self.mu_x = self.decoder_net(self.Z[0]) # TODO: try Z[-1]
 
         # print("mu_x " + self.mu_x)
             
@@ -282,10 +284,16 @@ class RecFusion(GeneralRecommender):
         user = interaction[self.USER_ID].cpu().numpy()
         item = interaction[self.ITEM_ID].cpu().numpy()
 
-        pdb.set_trace()
-        print(self.x[user, item].shape)
+        # pdb.set_trace()
+        # print(self.x[user, item].shape)
 
-        return self.forward(self.x[user, item])
+        rating_matrix = self.get_rating_matrix(user)
+
+        scores, _, _ = self.forward(rating_matrix)
+
+        return scores[[torch.arange(len(item)).to(self.device), item]]        
+        
+        # return self.forward(self.x[user, item])
 
         # return self.mu_x[user, item]
 
