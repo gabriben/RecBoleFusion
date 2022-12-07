@@ -141,4 +141,7 @@ class MultiVAE(GeneralRecommender):
 
         scores, _, _ = self.forward(rating_matrix)
 
+        print(scores)
+        print(scores.shape)
+        
         return scores.view(-1)
