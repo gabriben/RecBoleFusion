@@ -312,10 +312,13 @@ class RecFusion(GeneralRecommender):
 
         rating_matrix = self.get_rating_matrix(user)
 
+        print(rating_matrix)
+        print(rating_matrix.shape)        
+
         scores = self.forward(rating_matrix)
 
-        print(scores)
-        print(scores.shape)
+        # print(scores)
+        # print(scores.shape)
         
         return scores[[torch.arange(len(item)).to(self.device), item]]        
         
