@@ -304,15 +304,15 @@ class RecFusion(GeneralRecommender):
         return loss
 
     def predict(self, interaction):
-        user = interaction[self.USER_ID].cpu().numpy()
-        item = interaction[self.ITEM_ID].cpu().numpy()
+        user = interaction[self.USER_ID]
+        item = interaction[self.ITEM_ID]
 
         # pdb.set_trace()
         # print(self.x[user, item].shape)
 
         rating_matrix = self.get_rating_matrix(user)
 
-        scores, _, _ = self.forward(rating_matrix)
+        scores = self.forward(rating_matrix)
 
         return scores[[torch.arange(len(item)).to(self.device), item]]        
         
