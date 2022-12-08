@@ -315,10 +315,12 @@ class RecFusion(GeneralRecommender):
         print(rating_matrix)
         print(rating_matrix.shape)        
 
-        scores = self.forward(rating_matrix)
+        scores = self.forward(rating_matrix) * -1
 
         # print(scores)
         # print(scores.shape)
+
+        pdb.set_trace()
         
         return scores[[torch.arange(len(item)).to(self.device), item]]        
         
