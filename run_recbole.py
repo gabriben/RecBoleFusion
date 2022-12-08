@@ -12,6 +12,10 @@ import argparse
 
 from recbole.quick_start import run_recbole
 
+parameters_dict = {
+    "topk": [10, 20, 50, 100]
+}
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -22,4 +26,5 @@ if __name__ == '__main__':
     args, _ = parser.parse_known_args()
 
     config_file_list = args.config_files.strip().split(' ') if args.config_files else None
-    run_recbole(model=args.model, dataset=args.dataset, config_file_list=config_file_list)
+    run_recbole(model=args.model, dataset=args.dataset, config_file_list=config_file_list,
+    config_dict = parameters_dict)
