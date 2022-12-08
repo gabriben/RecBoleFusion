@@ -328,7 +328,17 @@ class RecFusion(GeneralRecommender):
         # pdb.set_trace()
         
         return scores[[torch.arange(len(item)).to(self.device), item]]        
+
+    def full_sort_predict(self, interaction):
+        user = interaction[self.USER_ID]
+
+        x = self.get_rating_matrix(user)
+
+        scores = self.forward(x)
         
+        return scores.view(-1)
+
+    
         # return self.forward(self.x[user, item])
 
         # return self.mu_x[user, item]
