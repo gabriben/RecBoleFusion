@@ -320,7 +320,7 @@ class RecFusion(GeneralRecommender):
         # print(rating_matrix)
         # print(rating_matrix.shape)        
 
-        scores = self.forward(x)# * -1
+        scores = self.forward(x) * -1
 
         # print(scores)
         # print(scores.shape)
