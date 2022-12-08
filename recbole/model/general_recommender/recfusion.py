@@ -334,7 +334,7 @@ class RecFusion(GeneralRecommender):
 
         x = self.get_rating_matrix(user)
 
-        scores = self.forward(x)
+        scores = self.forward(x) * -1
         
         return scores.view(-1)
 
