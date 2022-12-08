@@ -179,11 +179,13 @@ class RecFusion(GeneralRecommender):
         # load parameters info
         # reg_weight = config['reg_weight']
 
-        x = dataset.inter_matrix(form='csr').astype(np.float32)
+        # x = dataset.inter_matrix(form='csr').astype(np.float32)
         # just directly calculate the entire score matrix in init
         # (can't be done incrementally)
 
-        self.x = torch.FloatTensor(x.toarray()).to(self.device)
+        # self.x = torch.FloatTensor(x.toarray()).to(self.device)
+
+        # self.x = self.get_rating_matrix(user)
         # print(self.x)
         # print(self.x.shape)
         # self.interaction_matrix = x
@@ -272,9 +274,12 @@ class RecFusion(GeneralRecommender):
 
         # x = self.interaction_matrix
 
+        user = interaction[self.USER_ID]
+        x = self.get_rating_matrix(user)     
+
         self.init_weights()
         # self = self.forward()
-        self.forward(self.x)
+        self.forward(x)
         
         # mu_x = self.mu_x
 
@@ -282,7 +287,7 @@ class RecFusion(GeneralRecommender):
         # RE
 
         # Normal RE
-        RE = log_standard_normal(self.x - self.mu_x).sum(-1)
+        RE = log_standard_normal(x - self.mu_x).sum(-1)
 
         # KL
         KL = (log_normal_diag(self.Z[-1], torch.sqrt(1. - self.beta) * self.Z[-1],
@@ -310,12 +315,12 @@ class RecFusion(GeneralRecommender):
         # pdb.set_trace()
         # print(self.x[user, item].shape)
 
-        rating_matrix = self.get_rating_matrix(user)
+        x = self.get_rating_matrix(user)
 
-        print(rating_matrix)
-        print(rating_matrix.shape)        
+        # print(rating_matrix)
+        # print(rating_matrix.shape)        
 
-        scores = self.forward(rating_matrix) * -1
+        scores = self.forward(x)# * -1
 
         # print(scores)
         # print(scores.shape)
