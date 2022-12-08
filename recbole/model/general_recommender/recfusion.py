@@ -325,7 +325,7 @@ class RecFusion(GeneralRecommender):
         # print(scores)
         # print(scores.shape)
 
-        pdb.set_trace()
+        # pdb.set_trace()
         
         return scores[[torch.arange(len(item)).to(self.device), item]]        
         
