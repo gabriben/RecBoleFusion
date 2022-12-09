@@ -19,6 +19,8 @@ from recbole.model.abstract_recommender import GeneralRecommender
 from recbole.model.init import xavier_normal_initialization
 from recbole.utils import InputType
 
+import pdb
+
 
 class MultiVAE(GeneralRecommender):
     r"""MultiVAE is an item-based collaborative filtering model that simultaneously ranks all items for each user.
@@ -106,7 +108,7 @@ class MultiVAE(GeneralRecommender):
 
         self.update += 1
         if self.total_anneal_steps > 0:
-            anneal = min(self.anneal_cap, 1. * self.update / self.total_anneal_steps)
+            anneal = min(self.anneal_cap, 1. * self.update / self.total_anneal_steps0)
         else:
             anneal = self.anneal_cap
 
@@ -128,9 +130,6 @@ class MultiVAE(GeneralRecommender):
         rating_matrix = self.get_rating_matrix(user)
 
         scores, _, _ = self.forward(rating_matrix)
-
-        print(scores)
-        print(scores.shape)
         
         return scores[[torch.arange(len(item)).to(self.device), item]]
 
@@ -141,7 +140,6 @@ class MultiVAE(GeneralRecommender):
 
         scores, _, _ = self.forward(rating_matrix)
 
-        print(scores)
-        print(scores.shape)
+        pdb.set_trace()
         
         return scores.view(-1)

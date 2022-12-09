@@ -126,6 +126,11 @@ reduction = "sum"
 
 num_layers = "TODO"
 
+total_anneal_steps = 200000
+
+anneal_cap = 0.2
+
+
 ########################
 
 class RecFusion(GeneralRecommender):
@@ -151,6 +156,9 @@ class RecFusion(GeneralRecommender):
         self.history_item_id = self.history_item_id.to(self.device)
         self.history_item_value = self.history_item_value.to(self.device)
 
+        self.anneal_cap = anneal_cap
+        self.total_anneal_steps = total_anneal_steps
+        self.update = 0        
         
         ########################
 
@@ -258,7 +266,7 @@ class RecFusion(GeneralRecommender):
 
         # pdb.set_trace()
             
-        self.mu_x = self.decoder_net(self.Z[0]) # TODO: try Z[-1]
+        mu_x = self.decoder_net(self.Z[0]) # TODO: try Z[-1]
 
         # print("mu_x " + self.mu_x)
             
@@ -268,9 +276,9 @@ class RecFusion(GeneralRecommender):
         # self.mu_x = mu_x
 
         # return self
-        return self.mu_x
+        return mu_x
 
-    def calculate_loss(self, interaction):
+    def calculate_loss(self, interaction, reduction='avg'):
 
         # x = self.interaction_matrix
 
@@ -279,15 +287,25 @@ class RecFusion(GeneralRecommender):
 
         self.init_weights()
         # self = self.forward()
-        self.forward(x)
+        mu_x = self.forward(x)
         
         # mu_x = self.mu_x
 
+
+        self.update += 1
+        if self.total_anneal_steps > 0:
+            anneal = min(self.anneal_cap, 1. * self.update / self.total_anneal_steps)
+        else:
+            anneal = self.anneal_cap        
+
+        ########################
+
+            
         # =====ELBO
         # RE
 
         # Normal RE
-        RE = log_standard_normal(x - self.mu_x).sum(-1)
+        RE = log_standard_normal(x - mu_x).sum(-1)
 
         # KL
         KL = (log_normal_diag(self.Z[-1], torch.sqrt(1. - self.beta) * self.Z[-1],
@@ -325,7 +343,7 @@ class RecFusion(GeneralRecommender):
         # print(scores)
         # print(scores.shape)
 
-        # pdb.set_trace()
+
         
         return scores[[torch.arange(len(item)).to(self.device), item]]        
 
@@ -335,6 +353,8 @@ class RecFusion(GeneralRecommender):
         x = self.get_rating_matrix(user)
 
         scores = self.forward(x) * -1
+
+        # pdb.set_trace()
         
         return scores.view(-1)
 
