@@ -137,7 +137,7 @@ class RecFusion(GeneralRecommender):
     r"""RecFusion
 
     """
-    input_type = InputType.POINTWISE
+    input_type = InputType.PAIRWISE
     # type = ModelType.TRADITIONAL
 
     # x = None
