@@ -263,7 +263,7 @@ class RecFusion(GeneralRecommender):
             mu_i, log_var_i = torch.chunk(h, 2, dim=1)
 
             ##################################################
-            mu_i = reparameterization(log_var_i)
+            mu_i = reparameterization(mu_i, log_var_i)
             ##################################################
             
             self.mus.append(mu_i)
