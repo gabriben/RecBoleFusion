@@ -122,7 +122,7 @@ M = 200  # the number of neurons in scale (s) and translation (t) nets
 
 b = 0.0001  # hyperparater to tune
 
-reduction = "sum"
+reduction = "avg"
 
 num_layers = "TODO"
 
