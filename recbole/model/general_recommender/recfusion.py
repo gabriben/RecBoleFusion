@@ -261,11 +261,22 @@ class RecFusion(GeneralRecommender):
 
             h = self.p_dnns[i](self.Z[i+1])
             mu_i, log_var_i = torch.chunk(h, 2, dim=1)
+
+            ##################################################
+            mu_i = reparameterization(log_var_i)
+            ##################################################
+            
             self.mus.append(mu_i)
             self.log_vars.append(log_var_i)
 
-        # pdb.set_trace()
             
+
+        # pdb.set_trace()
+
+        #########
+
+        
+        
         mu_x = self.decoder_net(self.Z[0]) # TODO: try Z[-1]
 
         # print("mu_x " + self.mu_x)
