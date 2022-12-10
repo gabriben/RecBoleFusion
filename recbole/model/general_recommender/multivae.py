@@ -108,7 +108,7 @@ class MultiVAE(GeneralRecommender):
 
         self.update += 1
         if self.total_anneal_steps > 0:
-            anneal = min(self.anneal_cap, 1. * self.update / self.total_anneal_steps0)
+            anneal = min(self.anneal_cap, 1. * self.update / self.total_anneal_steps)
         else:
             anneal = self.anneal_cap
 
@@ -140,6 +140,6 @@ class MultiVAE(GeneralRecommender):
 
         scores, _, _ = self.forward(rating_matrix)
 
-        pdb.set_trace()
+        # pdb.set_trace()
         
         return scores.view(-1)

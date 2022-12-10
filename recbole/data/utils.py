@@ -185,6 +185,7 @@ def get_dataloader(config, phase):
         'ENMF': _get_AE_dataloader,
         'RaCT': _get_AE_dataloader,
         'RecVAE': _get_AE_dataloader,
+        'RecFusion': _get_Diff_dataloader
     }
 
     if config['model'] in register_table:
@@ -203,6 +204,15 @@ def get_dataloader(config, phase):
         elif eval_strategy == 'full':
             return FullSortEvalDataLoader
 
+def _get_Diff_dataloader(config, phase):
+    if phase == 'train':
+        return UserDataLoader
+    else:
+        eval_strategy = config['eval_neg_sample_args']['strategy']
+        return FullSortEvalDataLoader
+
+
+        
 
 def _get_AE_dataloader(config, phase):
     """Customized function for VAE models to get correct dataloader class.

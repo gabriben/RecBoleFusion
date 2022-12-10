@@ -33,6 +33,7 @@ from recbole.evaluator import Evaluator, Collector
 from recbole.utils import ensure_dir, get_local_time, early_stopping, calculate_valid_score, dict2str, \
     EvaluatorType, KGDataLoaderState, get_tensorboard, set_color, get_gpu_usage, WandbLogger
 
+import pdb
 
 class AbstractTrainer(object):
     r"""Trainer Class is used to manage the training and evaluation processes of recommender system models.
@@ -175,6 +176,7 @@ class Trainer(AbstractTrainer):
                 desc=set_color(f"Train {epoch_idx:>5}", 'pink'),
             ) if show_progress else train_data
         )
+
         for batch_idx, interaction in enumerate(iter_data):
             interaction = interaction.to(self.device)
             self.optimizer.zero_grad()
@@ -389,6 +391,7 @@ class Trainer(AbstractTrainer):
         return self.best_valid_score, self.best_valid_result
 
     def _full_sort_batch_eval(self, batched_data):
+
         interaction, history_index, positive_u, positive_i = batched_data
         try:
             # Note: interaction without item ids
@@ -410,8 +413,25 @@ class Trainer(AbstractTrainer):
         return interaction, scores, positive_u, positive_i
 
     def _neg_sample_batch_eval(self, batched_data):
-        interaction, row_idx, positive_u, positive_i = batched_data
+        interaction = batched_data
         batch_size = interaction.length
+        
+        # pdb.set_trace()
+
+        # self.config['eval_type'] = "Diffusion"
+        # if self.config['eval_type'] == "Diffusion":
+        #     interaction = batched_data
+        #     if batch_size <= self.test_batch_size:
+        #         origin_scores = self.model.predict(interaction.to(self.device))
+        #     else:
+        #         origin_scores = self._spilt_predict(interaction, batch_size)
+        #     return interaction, origin_scores
+
+                
+        # else:
+        
+        interaction, row_idx, positive_u, positive_i = batched_data
+
         if batch_size <= self.test_batch_size:
             origin_scores = self.model.predict(interaction.to(self.device))
         else:
@@ -443,7 +463,7 @@ class Trainer(AbstractTrainer):
         """
         if not eval_data:
             return
-
+        
         if load_best_model:
             checkpoint_file = model_file or self.saved_model_file
             checkpoint = torch.load(checkpoint_file)
@@ -473,6 +493,7 @@ class Trainer(AbstractTrainer):
         )
         for batch_idx, batched_data in enumerate(iter_data):
             interaction, scores, positive_u, positive_i = eval_func(batched_data)
+            # interaction, scores = eval_func(batched_data)            
             if self.gpu_available and show_progress:
                 iter_data.set_postfix_str(set_color('GPU RAM: ' + get_gpu_usage(self.device), 'yellow'))
             self.eval_collector.eval_batch_collect(scores, interaction, positive_u, positive_i)
@@ -481,6 +502,8 @@ class Trainer(AbstractTrainer):
         result = self.evaluator.evaluate(struct)
         self.wandblogger.log_eval_metrics(result, head='eval')
 
+        # pdb.set_trace()
+        
         return result
 
     def _spilt_predict(self, interaction, batch_size):

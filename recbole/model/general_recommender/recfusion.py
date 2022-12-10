@@ -162,6 +162,8 @@ class RecFusion(GeneralRecommender):
         
         ########################
 
+        # pdb.set_trace()
+        
         # self.device = config['device']
 
         self.beta = torch.FloatTensor([b]).to(self.device)
@@ -187,11 +189,11 @@ class RecFusion(GeneralRecommender):
         # load parameters info
         # reg_weight = config['reg_weight']
 
-        # x = dataset.inter_matrix(form='csr').astype(np.float32)
+        x = dataset.inter_matrix(form='csr').astype(np.float32)
         # just directly calculate the entire score matrix in init
         # (can't be done incrementally)
 
-        # self.x = torch.FloatTensor(x.toarray()).to(self.device)
+        self.x = torch.FloatTensor(x.toarray()).to(self.device)
 
         # self.x = self.get_rating_matrix(user)
         # print(self.x)
@@ -293,8 +295,11 @@ class RecFusion(GeneralRecommender):
 
         # x = self.interaction_matrix
 
+        # pdb.set_trace()
+        
         user = interaction[self.USER_ID]
-        x = self.get_rating_matrix(user)     
+
+        x = self.x[user, :]
 
         self.init_weights()
         # self = self.forward()
@@ -335,39 +340,38 @@ class RecFusion(GeneralRecommender):
         else:
             loss = -(RE - anneal * KL).mean()
 
+        # self.eval_mu_x = 
+
         return loss
 
     def predict(self, interaction):
         user = interaction[self.USER_ID]
-        item = interaction[self.ITEM_ID]
+        # item = interaction[self.ITEM_ID]
 
         # pdb.set_trace()
         # print(self.x[user, item].shape)
-
-        x = self.get_rating_matrix(user)
-
+        
         # print(rating_matrix)
         # print(rating_matrix.shape)        
 
-        scores = self.forward(x) * -1
+        scores = self.forward(self.x[user.unique(), :]) * -1
 
         # print(scores)
         # print(scores.shape)
 
 
         
-        return scores[[torch.arange(len(item)).to(self.device), item]]        
+        return scores # [[torch.arange(len(item)).to(self.device), item]]        
 
-    def full_sort_predict(self, interaction):
-        user = interaction[self.USER_ID]
+    # def full_sort_predict(self, interaction):
 
-        x = self.get_rating_matrix(user)
-
-        scores = self.forward(x) * -1
-
-        # pdb.set_trace()
+    #     # pdb.set_trace()        
         
-        return scores.view(-1)
+    #     user = interaction[self.USER_ID]
+
+    #     scores = self.forward(self.x[user, :]) * -1
+        
+    #     return scores.view(-1)
 
     
         # return self.forward(self.x[user, item])

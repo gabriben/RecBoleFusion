@@ -32,12 +32,12 @@ class UserDataLoader(AbstractDataLoader):
     """
 
     def __init__(self, config, dataset, sampler, shuffle=False):
-        if shuffle is False:
-            shuffle = True
-            self.logger.warning('UserDataLoader must shuffle the data.')
+        # if shuffle is False:
+        #     shuffle = True
+        #     self.logger.warning('UserDataLoader must shuffle the data.')
 
         self.uid_field = dataset.uid_field
-        self.user_list = Interaction({self.uid_field: torch.arange(dataset.user_num)})
+        self.user_list = Interaction({self.uid_field: torch.arange(dataset.user_num)})     
 
         super().__init__(config, dataset, sampler, shuffle=shuffle)
 

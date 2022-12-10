@@ -16,6 +16,8 @@ from recbole.evaluator.register import Register
 import torch
 import copy
 
+import pdb
+
 
 class DataStruct(object):
 
@@ -136,6 +138,8 @@ class Collector(object):
                 positive_u(Torch.Tensor): the row index of positive items for each user.
                 positive_i(Torch.Tensor): the positive item id for each user.
         """
+        pdb.set_trace()
+        
         if self.register.need('rec.items'):
 
             # get topk
