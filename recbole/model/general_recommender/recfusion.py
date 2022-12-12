@@ -349,7 +349,7 @@ class RecFusion(GeneralRecommender):
         user = interaction[self.USER_ID]
         # item = interaction[self.ITEM_ID]
 
-        pdb.set_trace()
+        # pdb.set_trace()
         # print(self.x[user, item].shape)
         
         # print(rating_matrix)
