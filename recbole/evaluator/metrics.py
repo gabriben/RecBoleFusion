@@ -159,7 +159,7 @@ class Recall(TopkMetric):
         return metric_dict
 
     def metric_info(self, pos_index, pos_len):
-        pdb.set_trace()
+        # pdb.set_trace()
         return np.nancumsum(pos_index, axis=1) / pos_len.reshape(-1, 1)
 
 
