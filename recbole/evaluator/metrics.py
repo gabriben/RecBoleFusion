@@ -126,7 +126,7 @@ class MAP(TopkMetric):
         return metric_dict
 
     def metric_info(self, pos_index, pos_len):
-        pre = pos_index.nancumsum(axis=1) / np.arange(1, pos_index.shape[1] + 1)
+        pre = np.nancumsum(pos_index, axis=1) / np.arange(1, pos_index.shape[1] + 1)
         sum_pre = np.nancumsum(pre * pos_index.astype(np.float), axis=1)
         len_rank = np.full_like(pos_len, pos_index.shape[1])
         actual_len = np.where(pos_len > len_rank, len_rank, pos_len)
@@ -227,7 +227,7 @@ class Precision(TopkMetric):
         return metric_dict
 
     def metric_info(self, pos_index):
-        return pos_index.nancumsum(axis=1) / np.arange(1, pos_index.shape[1] + 1)
+        return np.nancumsum(pos_index, axis=1) / np.arange(1, pos_index.shape[1] + 1)
 
 
 # CTR Metrics
@@ -532,7 +532,7 @@ class AveragePopularity(AbstractMetric):
         return value
 
     def metric_info(self, values):
-        return values.nancumsum(axis=1) / np.arange(1, values.shape[1] + 1)
+        return np.nancumsum(values, axis=1) / np.arange(1, values.shape[1] + 1)
 
     def topk_result(self, metric, value):
         """Match the metric value to the `k` and put them in `dictionary` form
@@ -728,7 +728,7 @@ class TailPercentage(AbstractMetric):
         return metric_dict
 
     def metric_info(self, values):
-        return values.nancumsum(axis=1) / np.arange(1, values.shape[1] + 1)
+        return np.nancumsum(values, axis=1) / np.arange(1, values.shape[1] + 1)
 
     def topk_result(self, metric, value):
         """Match the metric value to the `k` and put them in `dictionary` form.
