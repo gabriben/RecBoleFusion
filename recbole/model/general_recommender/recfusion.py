@@ -301,8 +301,12 @@ class RecFusion(GeneralRecommender):
         
         user = interaction[self.USER_ID]
 
-        x = self.x[user, :]
+        # x = self.x[user, :]
 
+        x = self.get_rating_matrix(user)
+
+        # pdb.set_trace()
+        
         # self = self.forward()
         mu_x = self.forward(x)
         
@@ -349,13 +353,15 @@ class RecFusion(GeneralRecommender):
         user = interaction[self.USER_ID]
         # item = interaction[self.ITEM_ID]
 
+        x = self.get_rating_matrix(user.unique())
+        
         # pdb.set_trace()
         # print(self.x[user, item].shape)
         
         # print(rating_matrix)
         # print(rating_matrix.shape)        
 
-        scores = self.forward(self.x[user.unique(), :]) * -1
+        scores = self.forward(x) * -1
 
         # print(scores)
         # print(scores.shape)

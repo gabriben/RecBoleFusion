@@ -33,6 +33,8 @@ from recbole.evaluator.utils import _binary_clf_curve
 from recbole.evaluator.base_metric import AbstractMetric, TopkMetric, LossMetric
 from recbole.utils import EvaluatorType
 
+import pdb 
+
 # TopK Metrics
 
 
@@ -60,7 +62,7 @@ class Hit(TopkMetric):
         return metric_dict
 
     def metric_info(self, pos_index):
-        result = np.cumsum(pos_index, axis=1)
+        result = np.nancumsum(pos_index, axis=1)
         return (result > 0).astype(int)
 
 
@@ -124,8 +126,8 @@ class MAP(TopkMetric):
         return metric_dict
 
     def metric_info(self, pos_index, pos_len):
-        pre = pos_index.cumsum(axis=1) / np.arange(1, pos_index.shape[1] + 1)
-        sum_pre = np.cumsum(pre * pos_index.astype(np.float), axis=1)
+        pre = pos_index.nancumsum(axis=1) / np.arange(1, pos_index.shape[1] + 1)
+        sum_pre = np.nancumsum(pre * pos_index.astype(np.float), axis=1)
         len_rank = np.full_like(pos_len, pos_index.shape[1])
         actual_len = np.where(pos_len > len_rank, len_rank, pos_len)
         result = np.zeros_like(pos_index, dtype=np.float)
@@ -157,7 +159,8 @@ class Recall(TopkMetric):
         return metric_dict
 
     def metric_info(self, pos_index, pos_len):
-        return np.cumsum(pos_index, axis=1) / pos_len.reshape(-1, 1)
+        pdb.set_trace()
+        return np.nancumsum(pos_index, axis=1) / pos_len.reshape(-1, 1)
 
 
 class NDCG(TopkMetric):
@@ -189,14 +192,14 @@ class NDCG(TopkMetric):
 
         iranks = np.zeros_like(pos_index, dtype=np.float)
         iranks[:, :] = np.arange(1, pos_index.shape[1] + 1)
-        idcg = np.cumsum(1.0 / np.log2(iranks + 1), axis=1)
+        idcg = np.nancumsum(1.0 / np.log2(iranks + 1), axis=1)
         for row, idx in enumerate(idcg_len):
             idcg[row, idx:] = idcg[row, idx - 1]
 
         ranks = np.zeros_like(pos_index, dtype=np.float)
         ranks[:, :] = np.arange(1, pos_index.shape[1] + 1)
         dcg = 1.0 / np.log2(ranks + 1)
-        dcg = np.cumsum(np.where(pos_index, dcg, 0), axis=1)
+        dcg = np.nancumsum(np.where(pos_index, dcg, 0), axis=1)
 
         result = dcg / idcg
         return result
@@ -224,7 +227,7 @@ class Precision(TopkMetric):
         return metric_dict
 
     def metric_info(self, pos_index):
-        return pos_index.cumsum(axis=1) / np.arange(1, pos_index.shape[1] + 1)
+        return pos_index.nancumsum(axis=1) / np.arange(1, pos_index.shape[1] + 1)
 
 
 # CTR Metrics
@@ -529,7 +532,7 @@ class AveragePopularity(AbstractMetric):
         return value
 
     def metric_info(self, values):
-        return values.cumsum(axis=1) / np.arange(1, values.shape[1] + 1)
+        return values.nancumsum(axis=1) / np.arange(1, values.shape[1] + 1)
 
     def topk_result(self, metric, value):
         """Match the metric value to the `k` and put them in `dictionary` form
@@ -725,7 +728,7 @@ class TailPercentage(AbstractMetric):
         return metric_dict
 
     def metric_info(self, values):
-        return values.cumsum(axis=1) / np.arange(1, values.shape[1] + 1)
+        return values.nancumsum(axis=1) / np.arange(1, values.shape[1] + 1)
 
     def topk_result(self, metric, value):
         """Match the metric value to the `k` and put them in `dictionary` form.
