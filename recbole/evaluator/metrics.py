@@ -153,13 +153,13 @@ class Recall(TopkMetric):
         super().__init__(config)
 
     def calculate_metric(self, dataobject):
+        # pdb.set_trace()        
         pos_index, pos_len = self.used_info(dataobject)
         result = self.metric_info(pos_index, pos_len)
         metric_dict = self.topk_result('recall', result)
         return metric_dict
 
     def metric_info(self, pos_index, pos_len):
-        # pdb.set_trace()
         return np.nancumsum(pos_index, axis=1) / pos_len.reshape(-1, 1)
 
 
