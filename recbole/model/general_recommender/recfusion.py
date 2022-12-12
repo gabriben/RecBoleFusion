@@ -189,6 +189,8 @@ class RecFusion(GeneralRecommender):
         # load parameters info
         # reg_weight = config['reg_weight']
 
+        self.init_weights()
+
         x = dataset.inter_matrix(form='csr').astype(np.float32)
         # just directly calculate the entire score matrix in init
         # (can't be done incrementally)
@@ -301,7 +303,6 @@ class RecFusion(GeneralRecommender):
 
         x = self.x[user, :]
 
-        self.init_weights()
         # self = self.forward()
         mu_x = self.forward(x)
         
@@ -348,7 +349,7 @@ class RecFusion(GeneralRecommender):
         user = interaction[self.USER_ID]
         # item = interaction[self.ITEM_ID]
 
-        # pdb.set_trace()
+        pdb.set_trace()
         # print(self.x[user, item].shape)
         
         # print(rating_matrix)
