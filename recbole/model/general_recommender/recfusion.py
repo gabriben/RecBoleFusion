@@ -191,11 +191,11 @@ class RecFusion(GeneralRecommender):
 
         self.init_weights()
 
-        x = dataset.inter_matrix(form='csr').astype(np.float32)
+        # x = dataset.inter_matrix(form='csr').astype(np.float32)
         # just directly calculate the entire score matrix in init
         # (can't be done incrementally)
 
-        self.x = torch.FloatTensor(x.toarray()).to(self.device)
+        # self.x = torch.FloatTensor(x.toarray()).to(self.device)
 
         # self.x = self.get_rating_matrix(user)
         # print(self.x)
