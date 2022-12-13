@@ -173,31 +173,31 @@ class RecFusion(GeneralRecommender):
 
         ########################
 
-        self.init_weights()
+        # self.init_weights()
         
-    def init_weights(self):
-        for layer in self.p_dnns:
-            # Xavier Initialization for weights
-            size = layer[0].weight.size()
-            fan_out = size[0]
-            fan_in = size[1]
-            std = np.sqrt(2.0/(fan_in + fan_out))
-            layer[0].weight.data.normal_(0.0, 0.0001)
+    # def init_weights(self):
+    #     for layer in self.p_dnns:
+    #         # Xavier Initialization for weights
+    #         size = layer[0].weight.size()
+    #         fan_out = size[0]
+    #         fan_in = size[1]
+    #         std = np.sqrt(2.0/(fan_in + fan_out))
+    #         layer[0].weight.data.normal_(0.0, 0.0001)
 
-            # Normal Initialization for Biases
-            layer[0].bias.data.normal_(0.0, 0.0001)
+    #         # Normal Initialization for Biases
+    #         layer[0].bias.data.normal_(0.0, 0.0001)
             
-        for layer in self.decoder_net:
-            # Xavier Initialization for weights
-            if str(layer) == "Linear":
-                size = layer.weight.size()
-                fan_out = size[0]
-                fan_in = size[1]
-                std = np.sqrt(2.0/(fan_in + fan_out))
-                layer.weight.data.normal_(0.0, 0.0001)
+    #     for layer in self.decoder_net:
+    #         # Xavier Initialization for weights
+    #         if str(layer) == "Linear":
+    #             size = layer.weight.size()
+    #             fan_out = size[0]
+    #             fan_in = size[1]
+    #             std = np.sqrt(2.0/(fan_in + fan_out))
+    #             layer.weight.data.normal_(0.0, 0.0001)
 
-                # Normal Initialization for Biases
-                layer.bias.data.normal_(0.0, 0.0001)
+    #             # Normal Initialization for Biases
+    #             layer.bias.data.normal_(0.0, 0.0001)
 
     # recbole code from multvae
     def get_rating_matrix(self, user):
