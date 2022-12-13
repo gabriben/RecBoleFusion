@@ -185,6 +185,7 @@ def get_dataloader(config, phase):
         'ENMF': _get_AE_dataloader,
         'RaCT': _get_AE_dataloader,
         'RecVAE': _get_AE_dataloader,
+        'CODIGEM': _get_Diff_dataloader,        
         'RecFusion': _get_Diff_dataloader
     }
 
