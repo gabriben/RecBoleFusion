@@ -1,5 +1,5 @@
 r"""
-RecFusion
+CODIGEM
 ################################################
 
 """
@@ -133,8 +133,8 @@ anneal_cap = 0.2
 
 ########################
 
-class RecFusion(GeneralRecommender):
-    r"""RecFusion
+class CODIGEM(GeneralRecommender):
+    r"""CODIGEM
 
     """
     input_type = InputType.PAIRWISE
