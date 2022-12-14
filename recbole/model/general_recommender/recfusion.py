@@ -252,7 +252,8 @@ class RecFusion(GeneralRecommender):
             mu_i, log_var_i = torch.chunk(h, 2, dim=1)
 
             ##################################################
-            mu_i = reparameterization(mu_i, log_var_i)
+            if not self.x_to_negpos: # maybe not needed to reparametrize if the original data was already -1, 1
+                mu_i = reparameterization(mu_i, log_var_i)
             ##################################################
             
             self.mus.append(mu_i)
