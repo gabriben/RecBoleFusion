@@ -160,12 +160,16 @@ class RecFusion(GeneralRecommender):
 
         self.p_dnns_depth = config["p_dnns_depth"]
         self.decoder_net_depth = config["decoder_net_depth"]
+        self.b_start = config["b_start"]
+        self.b_end = config["b_end"]
+        self.schedule_type = config["schedule_type"]
 
         self.update = 0        
         
         ########################
 
-        self.beta = torch.FloatTensor([self.b]).to(self.device)
+        betas = self.get_beta_schedule(self.schedule_type)
+        self.betas = torch.FloatTensor([betas]).to(self.device)
         
         D = dataset.item_num
         M = self.M
@@ -225,6 +229,14 @@ class RecFusion(GeneralRecommender):
         rating_matrix = torch.zeros(1).to(self.device).repeat(user.shape[0], self.n_items)
         rating_matrix.index_put_((row_indices, col_indices), self.history_item_value[user].flatten())
         return rating_matrix
+
+    # https://github.com/InFoCusp/diffusion_models/blob/main/Diffusion_models.ipynb
+    def get_beta_schedule(self, schedule_type):
+      if schedule_type == 'quadratic':
+        betas = np.linspace(self.b_start ** 0.5, self.b_end ** 0.5, self.T, dtype=np.float32) ** 2
+      elif schedule_type == 'linear':
+        betas = np.linspace(self.b_start, self.b_end, self.T, dtype=np.float32)
+      return betas    
                 
     def forward(self, x):
 
@@ -235,10 +247,10 @@ class RecFusion(GeneralRecommender):
         
         # =====
         # forward difussion
-        self.Z = [reparameterization_gaussian_diffusion(x, 0, self.beta)]
+        self.Z = [reparameterization_gaussian_diffusion(x, 0, self.betas[0])]
 
         for i in range(1, T):
-            self.Z.append(reparameterization_gaussian_diffusion(self.Z[-1], i, self.beta))
+            self.Z.append(reparameterization_gaussian_diffusion(self.Z[-1], i, self.betas[i]))
         
         # =====
         # backward diffusion
@@ -288,12 +300,12 @@ class RecFusion(GeneralRecommender):
         RE = log_standard_normal(x - mu_x).sum(-1)
 
         # KL
-        KL = (log_normal_diag(self.Z[-1], torch.sqrt(1. - self.beta) * self.Z[-1],
-                              torch.log(self.beta)) - log_standard_normal(self.Z[-1])).sum(-1)
+        KL = (log_normal_diag(self.Z[-1], torch.sqrt(1. - self.betas[0]) * self.Z[-1],
+                              torch.log(self.betas[0])) - log_standard_normal(self.Z[-1])).sum(-1)
 
         for i in range(len(self.mus)):
-            KL_i = (log_normal_diag(self.Z[i], torch.sqrt(1. - self.beta) * self.Z[i], torch.log(
-                self.beta)) - log_normal_diag(self.Z[i], self.mus[i], self.log_vars[i])).sum(-1)
+            KL_i = (log_normal_diag(self.Z[i], torch.sqrt(1. - self.betas[i]) * self.Z[i], torch.log(
+                self.betas[i])) - log_normal_diag(self.Z[i], self.mus[i], self.log_vars[i])).sum(-1)
 
             KL = KL + KL_i
 
