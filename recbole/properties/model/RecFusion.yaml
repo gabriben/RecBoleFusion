@@ -12,3 +12,5 @@ anneal_cap: 1
 xavier_initialization: False
 x_to_negpos: False
 decode_from_noisiest: True
+p_dnns_depth: 1
+decoder_net_depth: 1

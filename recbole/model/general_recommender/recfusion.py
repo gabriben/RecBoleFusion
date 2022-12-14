@@ -158,6 +158,9 @@ class RecFusion(GeneralRecommender):
         self.xavier_initialization = config["xavier_initialization"]
         self.x_to_negpos = config["x_to_negpos"]
         self.decode_from_noisiest = config["decode_from_noisiest"]
+
+        self.p_dnns_depth = config["p_dnns_depth"]
+        self.decoder_net_depth = config["decoder_net_depth"]
         
         ########################
 
@@ -166,19 +169,12 @@ class RecFusion(GeneralRecommender):
         D = dataset.item_num
         M = self.M
 
-        self.p_dnns = nn.ModuleList([nn.Sequential(nn.Linear(D, M), nn.PReLU(),
-                                              nn.Linear(M, M), nn.PReLU(),
-                                              nn.Linear(M, M), nn.PReLU(),
-                                              nn.Linear(M, M), nn.PReLU(),
-                                              nn.Linear(M, M), nn.PReLU(),
-                                              nn.Linear(M, 2*D)) for _ in range(self.T-1)])
+        self.p_dnns = nn.ModuleList([nn.Sequential(
+            *[nn.Linear(D, M), nn.PReLU()] * self.p_dnns_depth + [nn.Linear(M, 2*D)])
+                                     for _ in range(self.T-1)])
 
-        self.decoder_net = nn.Sequential(nn.Linear(D, M), nn.PReLU(),
-                                    nn.Linear(M, M), nn.PReLU(),
-                                    nn.Linear(M, M), nn.PReLU(),
-                                    nn.Linear(M, M), nn.PReLU(),
-                                    nn.Linear(M, M), nn.PReLU(),
-                                    nn.Linear(M, D), nn.Tanh())
+        self.decoder_net = nn.Sequential(
+            *[nn.Linear(D, M), nn.PReLU()] * self.decoder_net_depth + [nn.Linear(M, D), nn.Tanh()])
 
         ########################
 
