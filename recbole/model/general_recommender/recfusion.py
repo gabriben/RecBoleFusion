@@ -149,7 +149,6 @@ class RecFusion(GeneralRecommender):
 
         self.anneal_cap = config["anneal_cap"]
         self.total_anneal_steps = config["total_anneal_steps"]
-        self.update = 0
 
         self.T, self.M, self.b = config["T"], config["M"], config["b"]
         self.reduction = config["reduction"]
@@ -161,6 +160,8 @@ class RecFusion(GeneralRecommender):
 
         self.p_dnns_depth = config["p_dnns_depth"]
         self.decoder_net_depth = config["decoder_net_depth"]
+
+        self.update = 0        
         
         ########################
 
@@ -170,11 +171,15 @@ class RecFusion(GeneralRecommender):
         M = self.M
 
         self.p_dnns = nn.ModuleList([nn.Sequential(
-            *[nn.Linear(D, M), nn.PReLU()] * self.p_dnns_depth + [nn.Linear(M, 2*D)])
+            *[nn.Linear(D, M), nn.PReLU()] +
+            [nn.Linear(M, M), nn.PReLU()] * self.p_dnns_depth + [nn.Linear(M, 2*D)])
                                      for _ in range(self.T-1)])
 
         self.decoder_net = nn.Sequential(
-            *[nn.Linear(D, M), nn.PReLU()] * self.decoder_net_depth + [nn.Linear(M, D), nn.Tanh()])
+            *[nn.Linear(D, M), nn.PReLU()] +            
+            [nn.Linear(M, M), nn.PReLU()] * self.decoder_net_depth + [nn.Linear(M, D), nn.Tanh()])
+
+        pdb.set_trace()
 
         ########################
 
