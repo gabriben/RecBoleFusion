@@ -169,7 +169,7 @@ class RecFusion(GeneralRecommender):
         ########################
 
         betas = self.get_beta_schedule(self.schedule_type)
-        self.betas = torch.FloatTensor([betas]).to(self.device)
+        self.betas = torch.FloatTensor(betas).to(self.device)
         
         D = dataset.item_num
         M = self.M
@@ -244,7 +244,9 @@ class RecFusion(GeneralRecommender):
 
         if self.x_to_negpos:
             x = (x - 0.5 ) * 2
-        
+
+        pdb.set_trace()
+            
         # =====
         # forward difussion
         self.Z = [reparameterization_gaussian_diffusion(x, 0, self.betas[0])]
