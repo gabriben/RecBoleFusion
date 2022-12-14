@@ -116,19 +116,19 @@ def reparameterization(mu, log_var):
 def reparameterization_gaussian_diffusion(x, i, B):
     return torch.sqrt(1. - B) * x + torch.sqrt(B) * torch.randn_like(x)
 
-T = 3  # hyperparater to tune
+# T = 3  # hyperparater to tune
 
-M = 200  # the number of neurons in scale (s) and translation (t) nets
+# M = 200  # the number of neurons in scale (s) and translation (t) nets
 
-b = 0.0001  # hyperparater to tune
+# b = 0.0001  # hyperparater to tune
 
-reduction = "avg"
+# reduction = "avg"
 
-num_layers = "TODO"
+# num_layers = "TODO"
 
-total_anneal_steps = 200000
+# total_anneal_steps = 200000
 
-anneal_cap = 0.2
+# anneal_cap = 0.2
 
 
 ########################
@@ -147,22 +147,31 @@ class RecFusion(GeneralRecommender):
         self.history_item_id = self.history_item_id.to(self.device)
         self.history_item_value = self.history_item_value.to(self.device)
 
-        self.anneal_cap = anneal_cap
-        self.total_anneal_steps = total_anneal_steps
-        self.update = 0        
+        self.anneal_cap = config["anneal_cap"]
+        self.total_anneal_steps = config["total_anneal_steps"]
+        self.update = 0
+
+        self.T, self.M, self.b = config["T"], config["M"], config["b"]
+        self.reduction = config["reduction"]
+        self.total_anneal_steps = config["total_anneal_steps"]
+        self.anneal_cap = config["anneal_cap"]
+        self.xavier_initialization = config["xavier_initialization"]
+        self.x_to_negpos = config["x_to_negpos"]
+        self.decode_from_noisiest = config["decode_from_noisiest"]
         
         ########################
 
-        self.beta = torch.FloatTensor([b]).to(self.device)
+        self.beta = torch.FloatTensor([self.b]).to(self.device)
         
         D = dataset.item_num
+        M = self.M
 
         self.p_dnns = nn.ModuleList([nn.Sequential(nn.Linear(D, M), nn.PReLU(),
                                               nn.Linear(M, M), nn.PReLU(),
                                               nn.Linear(M, M), nn.PReLU(),
                                               nn.Linear(M, M), nn.PReLU(),
                                               nn.Linear(M, M), nn.PReLU(),
-                                              nn.Linear(M, 2*D)) for _ in range(T-1)])
+                                              nn.Linear(M, 2*D)) for _ in range(self.T-1)])
 
         self.decoder_net = nn.Sequential(nn.Linear(D, M), nn.PReLU(),
                                     nn.Linear(M, M), nn.PReLU(),
@@ -173,31 +182,32 @@ class RecFusion(GeneralRecommender):
 
         ########################
 
-        # self.init_weights()
+        if self.xavier_initialization:
+            self.init_weights()
         
-    # def init_weights(self):
-    #     for layer in self.p_dnns:
-    #         # Xavier Initialization for weights
-    #         size = layer[0].weight.size()
-    #         fan_out = size[0]
-    #         fan_in = size[1]
-    #         std = np.sqrt(2.0/(fan_in + fan_out))
-    #         layer[0].weight.data.normal_(0.0, 0.0001)
+    def init_weights(self):
+        for layer in self.p_dnns:
+            # Xavier Initialization for weights
+            size = layer[0].weight.size()
+            fan_out = size[0]
+            fan_in = size[1]
+            std = np.sqrt(2.0/(fan_in + fan_out))
+            layer[0].weight.data.normal_(0.0, 0.0001)
 
-    #         # Normal Initialization for Biases
-    #         layer[0].bias.data.normal_(0.0, 0.0001)
+            # Normal Initialization for Biases
+            layer[0].bias.data.normal_(0.0, 0.0001)
             
-    #     for layer in self.decoder_net:
-    #         # Xavier Initialization for weights
-    #         if str(layer) == "Linear":
-    #             size = layer.weight.size()
-    #             fan_out = size[0]
-    #             fan_in = size[1]
-    #             std = np.sqrt(2.0/(fan_in + fan_out))
-    #             layer.weight.data.normal_(0.0, 0.0001)
+        for layer in self.decoder_net:
+            # Xavier Initialization for weights
+            if str(layer) == "Linear":
+                size = layer.weight.size()
+                fan_out = size[0]
+                fan_in = size[1]
+                std = np.sqrt(2.0/(fan_in + fan_out))
+                layer.weight.data.normal_(0.0, 0.0001)
 
-    #             # Normal Initialization for Biases
-    #             layer.bias.data.normal_(0.0, 0.0001)
+                # Normal Initialization for Biases
+                layer.bias.data.normal_(0.0, 0.0001)
 
     # recbole code from multvae
     def get_rating_matrix(self, user):
@@ -217,8 +227,13 @@ class RecFusion(GeneralRecommender):
         rating_matrix.index_put_((row_indices, col_indices), self.history_item_value[user].flatten())
         return rating_matrix
                 
-    def forward(self, x):        
+    def forward(self, x):
 
+        T = self.T
+
+        if self.x_to_negpos:
+            x = (x - 0.5 ) * 2
+        
         # =====
         # forward difussion
         self.Z = [reparameterization_gaussian_diffusion(x, 0, self.beta)]
@@ -243,12 +258,14 @@ class RecFusion(GeneralRecommender):
             self.mus.append(mu_i)
             self.log_vars.append(log_var_i)
 
-        
-        mu_x = self.decoder_net(self.Z[0]) # TODO: try Z[-1]
+        if self.decode_from_noisiest:
+            mu_x = self.decoder_net(self.Z[-1])
+        else:
+            mu_x = self.decoder_net(self.Z[0])
 
         return mu_x
 
-    def calculate_loss(self, interaction, reduction='avg'):
+    def calculate_loss(self, interaction):
         
         user = interaction[self.USER_ID]
 
@@ -263,7 +280,6 @@ class RecFusion(GeneralRecommender):
             anneal = self.anneal_cap        
 
         ########################
-
             
         # =====ELBO
         # RE
@@ -279,11 +295,11 @@ class RecFusion(GeneralRecommender):
             KL_i = (log_normal_diag(self.Z[i], torch.sqrt(1. - self.beta) * self.Z[i], torch.log(
                 self.beta)) - log_normal_diag(self.Z[i], self.mus[i], self.log_vars[i])).sum(-1)
 
-            KL = KL + KL_i    
+            KL = KL + KL_i
 
         # Final ELBO
-        anneal = 1
-        if reduction == 'sum':
+
+        if self.reduction == 'sum':
             loss = -(RE - anneal * KL).sum()
         else:
             loss = -(RE - anneal * KL).mean()
