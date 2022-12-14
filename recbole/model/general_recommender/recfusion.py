@@ -244,8 +244,6 @@ class RecFusion(GeneralRecommender):
 
         if self.x_to_negpos:
             x = (x - 0.5 ) * 2
-
-        pdb.set_trace()
             
         # =====
         # forward difussion
