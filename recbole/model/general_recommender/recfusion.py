@@ -179,8 +179,6 @@ class RecFusion(GeneralRecommender):
             *[nn.Linear(D, M), nn.PReLU()] +            
             [nn.Linear(M, M), nn.PReLU()] * self.decoder_net_depth + [nn.Linear(M, D), nn.Tanh()])
 
-        pdb.set_trace()
-
         ########################
 
         if self.xavier_initialization:
