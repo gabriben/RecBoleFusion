@@ -16,3 +16,4 @@ decode_from_noisiest: False
 p_dnns_depth: 4
 decoder_net_depth: 4
 schedule_type: "quadratic"
+stopping_step: 3
