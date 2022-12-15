@@ -15,5 +15,5 @@ x_to_negpos: False
 decode_from_noisiest: False
 p_dnns_depth: 4
 decoder_net_depth: 4
-schedule_type: "quadratic"
+schedule_type: "linear"
 stopping_step: 3
