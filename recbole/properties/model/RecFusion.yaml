@@ -17,3 +17,5 @@ p_dnns_depth: 4
 decoder_net_depth: 4
 schedule_type: "quadratic"
 stopping_step: 3
+learner: "adamax"
+learning_rate: 0.0001

@@ -141,6 +141,8 @@ class Trainer(AbstractTrainer):
             optimizer = optim.Adagrad(params, lr=learning_rate, weight_decay=weight_decay)
         elif learner.lower() == 'rmsprop':
             optimizer = optim.RMSprop(params, lr=learning_rate, weight_decay=weight_decay)
+        elif learner.lower() == 'adamax':
+            optimizer = optim.Adamax(params, lr=learning_rate, weight_decay=weight_decay)            
         elif learner.lower() == 'sparse_adam':
             optimizer = optim.SparseAdam(params, lr=learning_rate)
             if weight_decay > 0:
