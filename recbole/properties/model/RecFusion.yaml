@@ -6,7 +6,7 @@ eval_type: "Diffusion"
 T: 10 # number of diffusion steps
 M: 200 # the number of neurons in scale (s) and translation (t) nets
 b_start: 0.0001 # beta
-b_end: 0.0001 # beta
+# b_end: 0.0001 # beta
 reduction: "avg"
 total_anneal_steps: 0
 anneal_cap: 1
