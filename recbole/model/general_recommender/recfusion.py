@@ -297,7 +297,7 @@ class RecFusion(GeneralRecommender):
         
         user = interaction[self.USER_ID]
 
-        x = self.get_rating_matrix(user)
+        x = self.get_rating_matrix(user)[:, : -1]
 
         # mu_x = self.forward(x)
 
@@ -342,7 +342,7 @@ class RecFusion(GeneralRecommender):
     def predict(self, interaction):
         user = interaction[self.USER_ID]
 
-        x = self.get_rating_matrix(user.unique())
+        x = self.get_rating_matrix(user.unique())[:, : -1]
 
         scores = self.forward(x)
 
