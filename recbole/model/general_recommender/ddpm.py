@@ -406,8 +406,6 @@ class OriginalUnet(nn.Module):
         t = self.time_mlp(time)
 
         h = []
-
-        pdb.set_trace()
         
         for block1, block2, attn, downsample in self.downs:
             x = block1(x, t)
@@ -415,7 +413,7 @@ class OriginalUnet(nn.Module):
 
             # x = block2(x, t)
             # x = attn(x)
-            # h.append(x)
+            h.append(x)
 
             x = downsample(x)
 
