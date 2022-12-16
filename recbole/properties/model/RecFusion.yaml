@@ -3,14 +3,14 @@ eval_args:
     topk: [10, 20, 50, 100]
 eval_batch_size: 336600
 eval_type: "Diffusion"
-T: 40 # number of diffusion steps
+T: 3 # number of diffusion steps
 M: 200 # the number of neurons in scale (s) and translation (t) nets
 b_start: 0.0001 # beta
 b_end: 0.1 # beta
 reduction: "avg"
 total_anneal_steps: 0
 anneal_cap: 1
-xavier_initialization: False
+xavier_initialization: True
 x_to_negpos: False
 decode_from_noisiest: False
 p_dnns_depth: 4
