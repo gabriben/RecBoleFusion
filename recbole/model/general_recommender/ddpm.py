@@ -413,9 +413,9 @@ class OriginalUnet(nn.Module):
             x = block1(x, t)
             h.append(x)
 
-            x = block2(x, t)
-            x = attn(x)
-            h.append(x)
+            # x = block2(x, t)
+            # x = attn(x)
+            # h.append(x)
 
             x = downsample(x)
 
@@ -428,8 +428,8 @@ class OriginalUnet(nn.Module):
             x = block1(x, t)
 
             x = torch.cat((x, h.pop()), dim=1)
-            x = block2(x, t)
-            x = attn(x)
+            # x = block2(x, t)
+            # x = attn(x)
 
             x = upsample(x)
 
