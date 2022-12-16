@@ -302,8 +302,6 @@ class RecFusion(GeneralRecommender):
         # mu_x = self.forward(x)
 
         Z = self.forward(x)
-
-        pdb.set_trace()
         
         self.update += 1
         if self.total_anneal_steps > 0:
