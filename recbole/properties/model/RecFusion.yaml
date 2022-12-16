@@ -10,7 +10,7 @@ b_end: 0.1 # beta
 reduction: "avg"
 total_anneal_steps: 0
 anneal_cap: 1
-xavier_initialization: True
+xavier_initialization: False
 x_to_negpos: False
 decode_from_noisiest: False
 p_dnns_depth: 4
