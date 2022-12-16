@@ -399,8 +399,6 @@ class OriginalUnet(nn.Module):
         self.final_conv = nn.Conv2d(dim, self.out_dim, 1)
 
     def forward(self, x, time):
-
-        pdb.set_trace()
         
         x = self.init_conv(x)
         r = x.clone()
@@ -408,8 +406,6 @@ class OriginalUnet(nn.Module):
         t = self.time_mlp(time)
 
         h = []
-
-        pdb.set_trace()
 
         
         for block1, block2, attn, downsample in self.downs:
