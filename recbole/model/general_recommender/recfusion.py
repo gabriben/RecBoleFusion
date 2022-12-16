@@ -185,7 +185,7 @@ class RecFusion(GeneralRecommender):
             *[nn.Linear(D, M), nn.PReLU()] +
             [nn.Linear(M, M), nn.PReLU()] * self.decoder_net_depth + [nn.Linear(M, D), nn.Tanh()])
 
-        self.unet = ddpm.OriginalUnet(dim = 2, channels = 1, resnet_block_groups=1)
+        self.unet = ddpm.OriginalUnet(dim = 2, channels = 1, resnet_block_groups=1, dim_mults=(1, 2, 2))
         
         ########################
 
