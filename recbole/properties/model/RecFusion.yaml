@@ -19,3 +19,9 @@ schedule_type: "quadratic"
 stopping_step: 3
 learner: "adamax"
 learning_rate: 0.0001
+# fix log var to beta_t
+# Unet with more timesteps. keep training even after the plateau
+
+# call Z = OriginalUnet() for all timesteps (and then sample when 50-100 timesteps)
+# loss: check what is log_standard_normal
+# check our KL with 813 in Jonathan Ho's code.

@@ -28,3 +28,4 @@ from recbole.model.general_recommender.sgl import SGL
 from recbole.model.general_recommender.admmslim import ADMMSLIM
 from recbole.model.general_recommender.recfusion import RecFusion
 from recbole.model.general_recommender.codigem import CODIGEM
+from recbole.model.general_recommender import ddpm
