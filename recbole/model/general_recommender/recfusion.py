@@ -264,7 +264,7 @@ class RecFusion(GeneralRecommender):
         for t in range(T - 1):
             # t = torch.FloatTensor([t]).to(self.device)
             # pdb.set_trace()
-            t = torch.tensor([t], dtype=torch.int32)
+            t = torch.tensor([t], dtype=torch.int32).to(self.device)
             mu_t = self.unet.forward(self.Z[t+1][None, None, :, :], t+1)
             mu_s.append(mu_t)
 
