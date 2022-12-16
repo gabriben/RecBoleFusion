@@ -407,6 +407,7 @@ class OriginalUnet(nn.Module):
 
         h = []
 
+        pdb.set_trace()
         
         for block1, block2, attn, downsample in self.downs:
             x = block1(x, t)
