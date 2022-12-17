@@ -322,7 +322,7 @@ class RecFusion(GeneralRecommender):
         KL = (log_normal_diag(self.Z[-1], torch.sqrt(1. - self.betas[0]) * self.Z[-1],
                               torch.log(self.betas[0])) - log_standard_normal(self.Z[-1])).sum(-1)
 
-        for i in range(1, len(Z - 1)):
+        for i in range(1, len(Z) - 1):
             KL_i = (log_normal_diag(self.Z[i], torch.sqrt(1. - self.betas[i]) * self.Z[i],
                               torch.log(self.betas[i])) - log_standard_normal(self.Z[i])).sum(-1)
         
