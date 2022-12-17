@@ -408,8 +408,8 @@ class OriginalUnet(nn.Module):
         h = []
         
         for block1, block2, attn, downsample in self.downs:
-            # x = block1(x, t)
-            # h.append(x)
+            x = block1(x, t)
+            h.append(x)
 
             # x = block2(x, t)
             # x = attn(x)
@@ -422,8 +422,8 @@ class OriginalUnet(nn.Module):
         x = self.mid_block2(x, t)
 
         for block1, block2, attn, upsample in self.ups:
-            # x = torch.cat((x, h.pop()), dim=1)
-            # x = block1(x, t)
+            x = torch.cat((x, h.pop()), dim=1)
+            x = block1(x, t)
 
             # x = torch.cat((x, h.pop()), dim=1)
             # x = block2(x, t)
