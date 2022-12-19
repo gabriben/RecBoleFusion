@@ -298,7 +298,7 @@ class RecFusion(GeneralRecommender):
         user = interaction[self.USER_ID]
 
         if len(user) < 200:
-            return None
+            return torch.Tensor([1])
 
         x = self.get_rating_matrix(user)[:, : -1]
 
