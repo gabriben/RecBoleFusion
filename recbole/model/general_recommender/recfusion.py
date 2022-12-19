@@ -298,8 +298,9 @@ class RecFusion(GeneralRecommender):
         user = interaction[self.USER_ID]
         
         if len(user) < 200:
+            pdb.set_trace()            
             user = user.append(self.prev_users)[:200]
-            pdb.set_trace()
+
 
         x = self.get_rating_matrix(user)[:, : -1]
 
