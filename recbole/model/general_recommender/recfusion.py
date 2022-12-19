@@ -294,13 +294,16 @@ class RecFusion(GeneralRecommender):
         # return mu_x
 
     def calculate_loss(self, interaction):
-        
-        user = interaction[self.USER_ID]
 
+        user = interaction[self.USER_ID]
+        
         if len(user) < 200:
-            return torch.Tensor([1])
+            user = user.append(self.prev_users)[:200]
+            pdb.set_trace()
 
         x = self.get_rating_matrix(user)[:, : -1]
+
+        self.prev_users = user
 
         # with torch.no_grad():
         #     if x.shape[0] < 200:
