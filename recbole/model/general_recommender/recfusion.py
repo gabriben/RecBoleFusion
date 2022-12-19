@@ -297,9 +297,8 @@ class RecFusion(GeneralRecommender):
 
         user = interaction[self.USER_ID]
         
-        if len(user) < 200:
-            pdb.set_trace()            
-            user = user.append(self.prev_users)[:200]
+        if len(user) < 200:       
+            user = torch.cat((user, self.prev_users), 0)[:200]
 
 
         x = self.get_rating_matrix(user)[:, : -1]
