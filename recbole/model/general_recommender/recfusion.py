@@ -300,7 +300,7 @@ class RecFusion(GeneralRecommender):
         x = self.get_rating_matrix(user)[:, : -1]
 
         if x.shape[0] < 200:
-            return 0
+            return torch.tensor([0.0]).to(self.device)
         # mu_x = self.forward(x)
 
         Z = self.forward(x)
