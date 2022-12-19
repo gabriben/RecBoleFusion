@@ -300,7 +300,7 @@ class RecFusion(GeneralRecommender):
         x = self.get_rating_matrix(user)[:, : -1]
 
         if x.shape[0] < 200:
-            pass
+            return 0
         # mu_x = self.forward(x)
 
         Z = self.forward(x)
