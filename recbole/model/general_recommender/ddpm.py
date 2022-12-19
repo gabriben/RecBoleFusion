@@ -415,7 +415,7 @@ class OriginalUnet(nn.Module):
             # x = block2(x, t)
             # x = attn(x)
             # h.append(x)
-            pdb.set_trace()
+
             x = downsample(x)
 
         x = self.mid_block1(x, t)
