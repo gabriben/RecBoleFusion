@@ -334,11 +334,12 @@ class OriginalUnet(nn.Module):
         time_dim = dim * 4
         # time_dim = dim * 1        
 
-        sinu_pos_emb = SinusoidalPosEmb(time_dim)        
+        # sinu_pos_emb = SinusoidalPosEmb(time_dim)        
+        # fourier_dim = time_dim
         
-        # sinu_pos_emb = SinusoidalPosEmb(dim)
-        # fourier_dim = dim
-        fourier_dim = time_dim        
+        sinu_pos_emb = SinusoidalPosEmb(dim)
+        fourier_dim = dim
+      
 
         # pdb.set_trace()
 
