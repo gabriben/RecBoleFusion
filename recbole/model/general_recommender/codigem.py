@@ -173,6 +173,9 @@ class CODIGEM(GeneralRecommender):
 
         ########################
 
+        import pdb
+        pdb.set_trace()
+        
         self.init_weights()
         
     def init_weights(self):

@@ -176,14 +176,14 @@ class RecFusion(GeneralRecommender):
         D = dataset.item_num
         M = self.M
 
-        # self.p_dnns = nn.ModuleList([nn.Sequential(
-        #     *[nn.Linear(D, M), nn.PReLU()] +
-        #     [nn.Linear(M, M), nn.PReLU()] * self.p_dnns_depth + [nn.Linear(M, 2*D)])
-        #                              for _ in range(self.T-1)])
+        self.p_dnns = nn.ModuleList([nn.Sequential(
+            *[nn.Linear(D, M), nn.PReLU()] +
+            [nn.Linear(M, M), nn.PReLU()] * self.p_dnns_depth + [nn.Linear(M, 2*D)])
+                                     for _ in range(self.T-1)])
 
-        # self.decoder_net = nn.Sequential(
-        #     *[nn.Linear(D, M), nn.PReLU()] +
-        #     [nn.Linear(M, M), nn.PReLU()] * self.decoder_net_depth + [nn.Linear(M, D), nn.Tanh()])
+        self.decoder_net = nn.Sequential(
+            *[nn.Linear(D, M), nn.PReLU()] +
+            [nn.Linear(M, M), nn.PReLU()] * self.decoder_net_depth + [nn.Linear(M, D), nn.Tanh()])
 
         self.unet = ddpm.OriginalUnet(dim = 1, channels = 1, resnet_block_groups=1, dim_mults=(1, 2))
         
@@ -270,28 +270,28 @@ class RecFusion(GeneralRecommender):
 
         return mu_s            
         
-        # self.mus = []
-        # self.log_vars = []
+        self.mus = []
+        self.log_vars = []
 
-        # for i in range(len(self.p_dnns) - 1, -1, -1):
+        for i in range(len(self.p_dnns) - 1, -1, -1):
 
-        #     h = self.p_dnns[i](self.Z[i+1])
-        #     mu_i, log_var_i = torch.chunk(h, 2, dim=1)
+            h = self.p_dnns[i](self.Z[i+1])
+            mu_i, log_var_i = torch.chunk(h, 2, dim=1)
 
-        #     ##################################################
-        #     if not self.x_to_negpos: # maybe not needed to reparametrize if the original data was already -1, 1
-        #         mu_i = reparameterization(mu_i, log_var_i)
-        #     ##################################################
+            ##################################################
+            if not self.x_to_negpos: # maybe not needed to reparametrize if the original data was already -1, 1
+                mu_i = reparameterization(mu_i, log_var_i)
+            ##################################################
             
-        #     self.mus.append(mu_i)
-        #     self.log_vars.append(log_var_i)
+            self.mus.append(mu_i)
+            self.log_vars.append(log_var_i)
 
-        # if self.decode_from_noisiest:
-        #     mu_x = self.decoder_net(self.Z[-1])
-        # else:
-        #     mu_x = self.decoder_net(self.Z[0])
+        if self.decode_from_noisiest:
+            mu_x = self.decoder_net(self.Z[-1])
+        else:
+            mu_x = self.decoder_net(self.Z[0])
 
-        # return mu_x
+        return mu_x
 
     def calculate_loss(self, interaction):
 
